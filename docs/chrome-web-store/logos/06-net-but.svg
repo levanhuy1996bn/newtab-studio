@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Nét bút">
+  <path d="M63 30c0-9-6-14-15-17" fill="none" stroke="#38513B" stroke-width="3" stroke-linecap="round"/>
+  <path d="M63 31c-16-1-26 4-36 15C12 65 20 89 37 103c13 11 30 10 42-1 12-10 13-25 23-30 6-2 9-7 7-14C104 42 87 30 63 31Z" fill="#FFC947"/>
+  <path d="M44 51c9 5 13 11 20 20 5 8 12 16 23 19m-41-2c8-3 14-9 21-18 7-9 12-15 21-19" fill="none" stroke="#55304A" stroke-width="9" stroke-linecap="round"/>
+  <path d="M63 29c8-11 20-14 33-10-7 10-20 14-33 10Z" fill="#537F47"/>
+</svg>
