@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Huy hiệu">
+  <rect x="16" y="16" width="96" height="96" rx="26" fill="#18372D"/>
+  <path d="M29 65c3-18 20-31 38-29 17 1 29 14 30 28 0 7 4 12 6 15-8 15-26 21-42 21-21 0-37-14-32-35Z" fill="#FFD05D"/>
+  <path d="M65 35c4-9 13-12 23-10-3 8-13 12-23 10Z" fill="#B5D3A1"/>
+  <path d="M49 51h11l8 11 8-11h11L74 69l14 18H76l-9-11-8 11H47l14-18-12-18Z" fill="#18372D"/>
+</svg>

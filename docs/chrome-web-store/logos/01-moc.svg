@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Mộc">
+  <path d="M18 67c3-25 24-42 48-40 20 1 30 14 36 28 5 12 6 22 12 30-9 16-26 24-45 25-29 1-55-16-51-43Z" fill="#FFBF29" stroke="#9B5815" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M67 27c7-13 20-16 35-12-7 11-20 16-35 12Z" fill="#35654D"/>
+  <path d="M47 48h13l10 14 10-14h13L76 70l18 24H80L69 79 57 94H44l18-24Z" fill="#35251D"/>
+</svg>

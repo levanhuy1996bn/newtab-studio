@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Xoài thuôn">
+  <defs>
+    <linearGradient id="peel" x1="29" y1="33" x2="91" y2="106" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFE16A"/><stop offset="1" stop-color="#F5A216"/>
+    </linearGradient>
+  </defs>
+  <path d="M62 31c8-14 20-18 38-15-8 12-21 16-38 15Z" fill="#285B40"/>
+  <path d="M56 28c23-3 43 12 46 34 2 18 3 29 10 38-10 9-25 13-39 10-21-4-39-16-48-31-12-21 2-47 31-51Z" fill="url(#peel)"/>
+  <path d="m48 49 12-2 13 15 11-14 11 3-16 19 13 19-13 2-11-14-11 14-12-3 17-19Z" fill="#422615"/>
+</svg>
