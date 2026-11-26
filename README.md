@@ -11,7 +11,7 @@ npm ci
 npm run dev
 ```
 
-Vite in địa chỉ bản xem trước. Bản này dùng localStorage thay cho chrome.storage.local để lưu ngôn ngữ và yêu thích. Cả hai bản dùng IndexedDB cho dữ liệu hình nền, với kho riêng theo origin.
+Dùng `npm run test:watch` để tự chạy lại kiểm thử khi sửa mã. Vite in địa chỉ bản xem trước. Bản này dùng localStorage thay cho chrome.storage.local để lưu ngôn ngữ và yêu thích. Cả hai bản dùng IndexedDB cho dữ liệu hình nền, với kho riêng theo origin.
 
 ## Cài vào Chrome
 

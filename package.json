@@ -1,6 +1,6 @@
 {
   "name": "newtab-studio",
-  "version": "0.6.8",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "engines": { "node": "^22.12.0 || >=24.0.0" },
@@ -9,7 +9,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "node --test",
-    "check": "npm test && npm run build && node scripts/check-build.js"
+    "test:watch": "node --test --watch test/*.test.js",
+    "check": "npm test && npm run build && node scripts/check-build.js",
+    "package": "npm run check && (archive=\"newtab-studio-$npm_package_version.zip\" && temp=$(mktemp .newtab-studio-package.XXXXXX) && trap 'rm -f \"$temp\"' 0 && (cd dist && zip -qr - .) > \"$temp\" && unzip -tq \"$temp\" && mv -f \"$temp\" \"$archive\" && echo \"Created $archive\")"
   },
   "dependencies": {
     "lucide-react": "0.539.0",

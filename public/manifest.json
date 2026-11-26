@@ -1,13 +1,17 @@
 {
   "manifest_version": 3,
-  "name": "NewTab Studio",
+  "name": "New Tab Studio with Wallpapers & Widgets",
+  "short_name": "New Tab Studio",
   "description": "__MSG_extensionDescription__",
-  "version": "0.6.8",
+  "version": "1.0.0",
   "minimum_chrome_version": "111",
   "default_locale": "en",
   "chrome_url_overrides": { "newtab": "index.html" },
   "permissions": ["storage"],
   "optional_permissions": ["history"],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; connect-src 'self'; img-src 'self' data: blob:"
+  },
   "icons": {
     "16": "icons/icon-16.png",
     "32": "icons/icon-32.png",

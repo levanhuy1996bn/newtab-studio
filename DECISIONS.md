@@ -3,6 +3,7 @@
 | Phạm vi | Quyết định và lý do |
 | --- | --- |
 | Đóng gói | React, Vite, JavaScript, Tailwind và Manifest V3. Vite tạo asset với đường dẫn tương đối để `dist/` chạy từ origin extension. Logic, font và tài nguyên đi kèm được đóng gói cục bộ. |
+| CSP của tiện ích | Các trang extension tải script và kết nối ở origin của tiện ích. Ảnh nền tải lên dùng URL `blob:`. Tìm kiếm và lối tắt điều hướng Chrome tới địa chỉ người dùng chọn. |
 | Phạm vi miễn phí | Phase 1–7 theo hướng local-first, sử dụng ngoại tuyến, có giao diện EN/VI. Cloud, AI và thương mại hóa thuộc lộ trình Phase 8–9. |
 | Phân chia lưu trữ | `chrome.storage.local` lưu ngôn ngữ và yêu thích. Bản Vite dùng `localStorage` cho các mục này. IndexedDB lưu theme đang dùng, hình nền, ảnh, chữ và canvas. Lựa chọn Phase 1 vẫn được đọc làm fallback. |
 | Tính nhất quán | Repository ghi các phần của theme và lựa chọn đang dùng cùng transaction. Cập nhật nền, chữ hoặc canvas giữ các phần khác. BroadcastChannel báo thay đổi giữa tab sau khi ghi. Asset đang được nền hoặc canvas tham chiếu được bảo vệ khỏi thao tác xóa. |
