@@ -1,15 +1,15 @@
 # Bàn giao phiên làm việc
 
-**Mốc 26/11/2026 · NewTab Studio 0.6.8 · Hoàn tất Phase 1–6 và chuẩn bị Store Listing trong Phase 7.**
+**Mốc 26/11/2026 · New Tab with Wallpapers & Widgets 1.0.0 · Hoàn tất Phase 1–6 và chuẩn bị Store Listing trong Phase 7.**
 
 | Mục | Trạng thái |
 | --- | --- |
-| Công việc phiên này | Liên kết nhanh dạng ô, thêm/sửa/gỡ từ New Tab và hai nguồn lịch sử Chrome tùy chọn |
-| Tệp cập nhật | [Shortcuts.jsx](src/Shortcuts.jsx), renderer, widget model, CSS, dịch EN/VI, manifest, kiểm thử và [tài liệu Chrome Web Store](docs/chrome-web-store/LISTING.md) |
-| Mã sản phẩm | 0.6.8 ở `dist/` và [ZIP](newtab-studio-0.6.8.zip) |
+| Công việc phiên này | Đối chiếu cấu hình DevPocket, rút gọn đóng gói, thêm test watch, short name và CSP |
+| Tệp cập nhật | [package.json](package.json), [manifest.json](public/manifest.json), lockfile và tài liệu phát hành |
+| Mã sản phẩm | 1.0.0 ở `dist/` và [ZIP](newtab-studio-1.0.0.zip) |
 | Việc tiếp theo | Chủ tài khoản cập nhật [chính sách quyền riêng tư](docs/chrome-web-store/PRIVACY.md) trên Gist và điền Developer Dashboard. Phase 7 còn quản lý theme và backup/restore |
-| Kiểm tra | 25 bài kiểm thử, build, Manifest V3 và ZIP đạt. Chrome 158 xác minh thao tác lối tắt giữa hai tab. Hai chế độ lịch sử chạy với API thật trong hồ sơ tạm có quyền. Xem [PROGRESS.md](PROGRESS.md) |
-| Điểm cần lưu ý | Hộp thoại cấp quyền của Chrome chưa được chấp thuận thủ công khi chạy headless. Thư mục chưa có Git. Weather chờ đánh giá nguồn. [Vấn đề đã biết](KNOWN_ISSUES.md) |
+| Kiểm tra | 25 bài kiểm thử, build, Manifest V3 và ZIP đạt. Chrome 158 nạp ZIP giải nén, xác minh manifest, ảnh tải lên và điều hướng tìm kiếm. Lỗi nén mô phỏng giữ nguyên ZIP cũ. Xem [PROGRESS.md](PROGRESS.md) |
+| Điểm cần lưu ý | Hộp thoại cấp quyền của Chrome chưa được chấp thuận thủ công khi chạy headless. Git đang ở nhánh `develop`. Weather chờ đánh giá nguồn. [Vấn đề đã biết](KNOWN_ISSUES.md) |
 
 ## Tiếp tục từ Phase 7
 

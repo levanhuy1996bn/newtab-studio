@@ -1,5 +1,23 @@
 # Tiến độ
 
+## 2026-11-26 · Đồng bộ cấu hình với cách làm của DevPocket
+
+- Đưa lệnh nén vào `package.json`, bỏ script đóng gói riêng và thêm `npm run test:watch` bằng Node. Đồng bộ metadata lockfile với 1.0.0.
+- Manifest thêm tên ngắn **New Tab** và CSP cho tài nguyên cục bộ, cho phép ảnh tải lên qua `blob:`.
+- `npm run package` đạt 25 bài kiểm thử và tạo [ZIP 1.0.0](newtab-studio-1.0.0.zip). Lỗi nén mô phỏng giữ nguyên ZIP cũ và dọn file tạm. Chế độ test watch chạy trên máy. Chrome nạp ZIP đã giải nén, áp dụng ảnh tải lên và kiểm tra điều hướng tìm kiếm với yêu cầu được chặn trong hồ sơ thử nghiệm.
+
+## 2026-11-26 · Mô tả Chrome Web Store 1.0.0
+
+- Cập nhật mô tả ngắn EN/VI trong gói và mô tả dài theo nhóm chức năng trong [LISTING.md](docs/chrome-web-store/LISTING.md). Tên trong manifest do chủ dự án chọn là **New Tab with Wallpapers & Widgets**.
+- `npm run package` đạt 25 bài kiểm thử, build và ZIP. Chrome 158 nạp gói giải nén, xác minh tên, version, mô tả tiếng Anh trong manifest và mở New Tab. Hai mô tả ngắn khớp nội dung Store, dài 97 ký tự tiếng Anh và 84 ký tự tiếng Việt.
+- [ZIP 1.0.0](newtab-studio-1.0.0.zip) sẵn cho bước upload. Chủ tài khoản cập nhật Gist và điền Developer Dashboard.
+
+## 2026-11-26 · Đóng gói gửi Chrome Web Store
+
+- Thêm `npm run package` để chạy `npm run check`, tạo ZIP theo phiên bản manifest và kiểm tra ZIP trước khi thay thế bản cùng phiên bản. Đã tạo [ZIP 0.6.8](newtab-studio-0.6.8.zip) với manifest ở gốc.
+- 25 bài kiểm thử và build đạt. Chrome 158 nạp thư mục giải nén trong hồ sơ tạm, mở New Tab, tìm ảnh tiếng Việt và áp dụng theme từ Thư viện.
+- Gist công khai đọc được và chưa có mục quyền lịch sử Chrome. Trước khi gửi duyệt, chủ tài khoản cập nhật bằng [PRIVACY.md](docs/chrome-web-store/PRIVACY.md) và dùng giải trình quyền trong [LISTING.md](docs/chrome-web-store/LISTING.md). Hộp thoại cấp quyền lịch sử vẫn cần kiểm tra bằng Chrome có giao diện.
+
 ## 2026-11-26 · Widget lối tắt trên New Tab
 
 - Bản 0.6.8 mở rộng Liên kết nhanh thành các ô lối tắt. Thêm, sửa và gỡ trang ngay trên New Tab. Cài đặt widget chọn Đã lưu, Hay truy cập hoặc Mới truy cập. Giữ danh sách từ thiết kế cũ và lưu chỉnh sửa mới trong IndexedDB theo ID widget.

@@ -4,6 +4,7 @@ Các mốc dưới đây là bản build cục bộ. Kết quả kiểm thử ch
 
 | Phiên bản | Thay đổi |
 | --- | --- |
+| 1.0.0 | Dùng tên New Tab with Wallpapers & Widgets và cập nhật mô tả EN/VI cho gói cùng Chrome Web Store. |
 | 0.6.8 | Liên kết nhanh hiển thị thành ô lối tắt. Thêm, sửa và gỡ trên New Tab hoặc hiện các trang hay mở và vừa mở bằng quyền lịch sử Chrome tùy chọn. |
 | 0.6.7 | Gắn nhãn Thiên nhiên và Bầu trời cho wallpaper theo nội dung, đồng thời giữ nhóm Anime theo phong cách. |
 | 0.6.6 | Thêm bộ chọn widget trên New Tab, kéo thả và di chuyển bằng phím, chỉnh độ đậm nền kính mờ. Ẩn rồi bật lại giữ nguyên dữ liệu widget. |
