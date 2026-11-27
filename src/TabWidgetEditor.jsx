@@ -63,7 +63,7 @@ export function TabWidgetEditor({ active, language, onApply, onClose, children }
     setLayers(next)
     setLayoutChanged(true)
   }
-  const gesture = useCanvasGesture(commitLayout)
+  const gesture = useCanvasGesture(commitLayout, (layer) => layer.type === 'widget')
   const widgets = layers.filter((layer) => layer.type === 'widget')
   const visible = widgets.filter((layer) => !layer.hidden)
   const selected = visible.find((layer) => layer.id === selectedId)

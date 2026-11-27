@@ -105,7 +105,7 @@ function createStorage() {
   }
 }
 
-const browserLanguage = globalThis.navigator?.language?.split('-')[0] === 'vi' ? 'vi' : 'en'
+const defaultLanguage = 'en'
 const storage = createStorage()
 const preferenceLock = (operation) => globalThis.navigator?.locks
   ? navigator.locks.request('newtab-studio-preferences', operation) : operation()
@@ -161,7 +161,7 @@ function mergePreferences(values, state) {
   const updates = {}
   if (Object.hasOwn(values, languageKey)) {
     const language = values[languageKey]
-    updates.language = language === 'en' || language === 'vi' ? language : browserLanguage
+    updates.language = language === 'en' || language === 'vi' ? language : defaultLanguage
   }
   if (Object.hasOwn(values, activeKey)) updates.active = readActiveTheme(values[activeKey])
   if (Object.hasOwn(values, scheduleKey)) updates.schedule = readSchedule(values[scheduleKey])
@@ -200,7 +200,7 @@ export const usePreferences = create((set, get) => {
 
   return {
     ready: false,
-    language: browserLanguage,
+    language: defaultLanguage,
     active: readActiveTheme(),
     schedule: readSchedule(),
     tabSelection: readTabSelection(),
@@ -261,7 +261,7 @@ export function connectPreferences() {
     lastScheduledId = scheduledThemeId(schedule)
     const requested = lastScheduledId && (tabSelection ?? { version: 1, themeId: lastScheduledId, useBackground: true })
     try {
-      const baseline = await readActiveSelection()
+      const baseline = await readActiveSelection() ?? await readActiveSelection(legacyActive)
       const next = requested && (tabSelection || baseline?.themeId !== requested.themeId)
         ? await readActiveSelection(requested) : baseline
       if (!cancelled && read === selectionRead) {

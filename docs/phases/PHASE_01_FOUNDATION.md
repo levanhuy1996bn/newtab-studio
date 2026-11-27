@@ -2,7 +2,7 @@
 
 ## Đầu ra
 
-Trang New Tab mặc định, đồng hồ và ngày, Gallery với 36 theme thuộc sáu nhóm, tìm kiếm cả hai ngôn ngữ, bộ lọc, yêu thích, xem thử, áp dụng và chỉnh hai màu. Có metadata Chrome và UI EN/VI.
+Trang New Tab mặc định, đồng hồ và ngày, Gallery với 36 theme thuộc sáu nhóm, tìm kiếm cả hai ngôn ngữ, bộ lọc, yêu thích, xem thử, áp dụng và chỉnh hai màu. Có metadata Chrome và UI EN/VI. Từ 1.1.0, nút More by the Creator ở góc dưới trái mở bảng liên kết tiếng Anh cho các dự án và thơ của tác giả.
 
 ## Triển khai
 

@@ -11,6 +11,6 @@ Nghiệm thu bằng đoạn thơ nhiều dòng, văn bản dài, tiếng Việt 
 
 ## Nội dung và font đi kèm
 
-- 14 mẫu song ngữ do NewTab Studio biên soạn, gồm ba lời chào, ba bài thơ ngắn và tám châm ngôn. Từ 1.1.1, thư viện có thêm 20 đoạn Kinh Thánh. Tiếng Việt do người dùng cung cấp. Tiếng Anh lấy từ bản World English Bible theo thứ tự sách Công giáo, thuộc phạm vi công cộng. Mẫu chèn trực tiếp có thể sửa. Châm ngôn mỗi ngày cập nhật theo ngày và ngôn ngữ của tiện ích. [Nguồn bản Anh](https://ebible.org/Scriptures/details.php?id=eng-web-c)
+- 14 mẫu song ngữ do Mango New Tab Studio biên soạn, gồm ba lời chào, ba bài thơ ngắn và tám châm ngôn. Từ 1.1.0, thư viện có thêm 26 đoạn Kinh Thánh. Tiếng Việt do người dùng cung cấp. Tiếng Anh lấy từ bản World English Bible theo thứ tự sách Công giáo, thuộc phạm vi công cộng. Mẫu chèn trực tiếp có thể sửa. Châm ngôn mỗi ngày cập nhật theo ngày và ngôn ngữ của tiện ích. [Nguồn bản Anh](https://ebible.org/Scriptures/details.php?id=eng-web-c)
 - Lora và Noto Sans được đóng gói dưới dạng TrueType biến thiên, với fallback hệ thống. [Nguồn Lora](https://github.com/google/fonts/tree/main/ofl/lora) · [SIL OFL của Lora](../../public/fonts/lora-OFL.txt) · [Nguồn Noto Sans](https://github.com/google/fonts/tree/main/ofl/notosans) · [SIL OFL của Noto Sans](../../public/fonts/noto-sans-OFL.txt)
 - Mỗi preset có tối đa tám khối, đặt trên hoặc dưới đồng hồ và căn lề trong khung. Bố trí tự do theo tọa độ thuộc Phase 4.

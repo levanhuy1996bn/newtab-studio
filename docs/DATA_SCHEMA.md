@@ -4,7 +4,7 @@
 
 | Khóa | Kiểu | Giá trị mặc định |
 | --- | --- | --- |
-| `nts.language` | `en\|vi` | Suy ra từ ngôn ngữ trình duyệt |
+| `nts.language` | `en\|vi` | `en` khi chưa có lựa chọn hợp lệ |
 | `nts.activeTheme` | `{ version: 1, themeId: string, overrides: null \| { base: string, accent: string } }` | Dữ liệu Phase 1 được đọc trước lần áp dụng đầu tiên trên Phase 2 |
 | `nts.favorite.<themeId>` | boolean | false |
 
@@ -42,7 +42,7 @@ Store `themes` lưu `{ id, schemaVersion: 2, background, textLayers, updatedAt }
 - Lớp có `id, type, name, x, y, width, height, rotation, opacity, locked, hidden, groupId, props`. Kích thước tối thiểu 24 px, rotation biểu diễn theo độ và opacity 0–100. Phần hình vượt mặt phẳng được cắt khi dựng.
 - `type` nhận `rect, ellipse, frame, sticker, image, text`. Frame có `stroke`, sticker có `symbol`, image có `assetId`, text có `text, font, size`. Mỗi lớp có màu, trừ lớp ảnh dùng hình gốc.
 - `groupId` có tối thiểu hai thành viên. Nhân bản tạo ID lớp và ID nhóm mới, giữ quan hệ giữa các lớp được nhân bản.
-- Bản ghi cũ đọc thành canvas rỗng. Chỉ ghi v3 khi lưu canvas lần đầu hoặc cập nhật document đã ở v3. Các phần nền, chữ và canvas vẫn tách riêng trong document.
+- Bản ghi cũ của preset thiếu canvas nhận lớp Daily quote mặc định khi đọc để hiển thị. Giữ canvas đã lưu, kể cả mảng lớp rỗng. Các phần nền, chữ và canvas vẫn tách riêng trong document.
 
 ## Phase 5 · IndexedDB v2 và theme document v4
 
@@ -67,4 +67,4 @@ Store `themes` lưu `{ id, schemaVersion: 2, background, textLayers, updatedAt }
 - Nhập thành bản sao remap ID theme, workspace, ảnh và lớp canvas, giữ cấu hình cục bộ hiện tại. Khôi phục đầy đủ thay dữ liệu trong một transaction IndexedDB. Cùng transaction ghi tùy chọn chờ đồng bộ. Nếu Chrome chưa ghi được vào `chrome.storage.local`, dữ liệu nhập và tùy chọn vẫn đọc được từ bản ghi này, tiện ích thử lại khi mở.
 - Bản sao lưu đầy đủ chứa dữ liệu riêng do người dùng tạo. Bản xuất theme chứa thiết kế và cấu hình liên kết trong thiết kế. Lịch sử Chrome chỉ được đọc để hiển thị và không nằm trong tệp xuất.
 
-- Từ 1.1.1, đồng hồ kim lưu `props.config.face` và `props.config.markings`. Bản ghi cũ đọc mặc định `ivory` và `numbers`; tùy chọn kim giây cũ giữ nguyên. Kích thước widget tiếp tục dùng `width` và `height` của lớp canvas.
+- Từ 1.1.0, đồng hồ kim lưu `props.config.face` và `props.config.markings`. Bản ghi cũ đọc mặc định `ivory` và `numbers`; tùy chọn kim giây cũ giữ nguyên. Kích thước widget tiếp tục dùng `width` và `height` của lớp canvas.

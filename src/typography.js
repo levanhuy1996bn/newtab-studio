@@ -52,7 +52,7 @@ const entries = [
 
 const originalEntries = entries.map(([id, kind, en, vi, enText, viText]) => ({
   id, kind, titles: [en, vi], texts: [enText, viText],
-  author: 'NewTab Studio', source: 'original',
+  author: 'Mango New Tab Studio', source: 'original',
 }))
 export const textEntries = [...originalEntries, ...scriptureQuotes]
 const entriesById = new Map(textEntries.map((entry) => [entry.id, entry]))

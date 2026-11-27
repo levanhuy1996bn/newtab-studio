@@ -1,6 +1,6 @@
 # Wallpaper anime từ ảnh tham chiếu
 
-## Doraemon · Bản 1.1.4
+## Doraemon · Bản 1.1.0
 
 Năm ảnh được vẽ lại từ ảnh người dùng cung cấp bằng ImageGen tích hợp. Các ảnh vào nhóm **Anime**, **Doraemon** và **Phong cảnh**. Ảnh WebP đầy đủ là 1600 × 900 và ảnh thu nhỏ là 480 × 270.
 
@@ -39,9 +39,9 @@ ImageGen chặn đầu ra của cảnh hòa nhạc ngoài vũ trụ (`img.png`) 
 
 </details>
 
-## Bản 1.1.2
+## Đợt bổ sung phong cảnh và Conan
 
-Các tên `img.png` đến `img_6.png` ở bảng này ghi lại tên từng dùng trong đợt 1.1.2. Thư mục `assets/` hiện dùng các tên đó cho ảnh nguồn Doraemon.
+Các tên `img.png` đến `img_6.png` ở bảng này ghi lại tên từng dùng trong đợt ảnh phong cảnh và Conan. Thư mục `assets/` hiện dùng các tên đó cho ảnh nguồn Doraemon.
 
 Đợt này có 12 bản vẽ từ ảnh nguồn và một cảnh ga ven biển mới. Wallpaper đóng gói ở 1600 × 900, ảnh thu nhỏ ở 480 × 270. Cả hai dùng WebP. Ảnh chụp màn hình được dựng thành cảnh trang giấy và đã bỏ giao diện điện thoại cùng thông báo.
 

@@ -1,6 +1,6 @@
 # Đặc tả sản phẩm
 
-NewTab Studio giúp người dùng Chrome biến trang tab mới thành một không gian cá nhân có thể thiết kế, xem trước và sử dụng offline. Hai nhóm chính là người muốn đổi diện mạo trong vài thao tác và người muốn thiết kế bố cục, nội dung cùng tiện ích riêng.
+Mango New Tab Studio giúp người dùng Chrome biến trang tab mới thành một không gian cá nhân có thể thiết kế, xem trước và sử dụng offline. Hai nhóm chính là người muốn đổi diện mạo trong vài thao tác và người muốn thiết kế bố cục, nội dung cùng tiện ích riêng.
 
 ## Luồng sử dụng
 

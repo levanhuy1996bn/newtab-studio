@@ -2,7 +2,7 @@
 
 [Các đợt vẽ wallpaper anime](ANIME_WALLPAPERS.md) có bảng ảnh gốc, tên theme, file WebP và prompt đã dùng.
 
-## Cảnh vũ trụ · 1.1.3
+## Cảnh vũ trụ · 1.1.0
 
 Ba ảnh dùng ImageGen tích hợp, xuất WebP 1600 × 900 và ảnh thu nhỏ 480 × 270. Cực quang nhìn từ quỹ đạo dùng ảnh đã tạo trong chat trước.
 

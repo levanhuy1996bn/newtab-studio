@@ -1,12 +1,14 @@
 import { localPictureIds, needsImage, readBackground } from './background.js'
-import { localCanvasPictures, readCanvas } from './canvasModel.js'
+import { canvasSize, localCanvasPictures, readCanvas } from './canvasModel.js'
 import { readEffects } from './effects.js'
 import { defaultThemeId, isCustomThemeId, themesById } from './themeCatalog.js'
 import { readTextLayers } from './typography.js'
+import { widgetRegistry } from './widgetModel.js'
 
 export const defaultWorkspaceId = 'default'
 export const defaultWorkspace = { id: defaultWorkspaceId, name: '' }
 export const designParts = ['background', 'textLayers', 'canvas', 'effects']
+export const defaultQuoteId = 'default-daily-quote'
 export { isCustomThemeId, isThemeId } from './themeCatalog.js'
 export const isWorkspaceId = (id) => id === defaultWorkspaceId || (typeof id === 'string' && /^workspace:[\w-]{1,64}$/.test(id))
 export const cleanName = (value) => typeof value === 'string' ? value.trim().slice(0, 60) : ''
@@ -29,6 +31,16 @@ export function readDesignPart(key, value) {
 
 export function readDesign(value) {
   return Object.fromEntries(designParts.map((key) => [key, readDesignPart(key, value?.[key])]))
+}
+
+export function readThemeCanvas(themeId, canvas) {
+  if (canvas || !themesById.has(themeId)) return readCanvas(canvas)
+  const [width] = widgetRegistry.quote.size
+  const height = 168
+  return readCanvas({ layers: [{
+    id: defaultQuoteId, type: 'widget', props: { kind: 'quote' },
+    x: canvasSize.width - width, y: canvasSize.height - height, width, height,
+  }] })
 }
 
 export function assetReferences({ background, canvas }) {

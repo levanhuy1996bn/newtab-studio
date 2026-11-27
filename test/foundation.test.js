@@ -3,6 +3,22 @@ import test from 'node:test'
 import { readActiveTheme } from '../src/preferences.js'
 import { defaultThemeId, filterThemes, galleryCategories, themes, themesById } from '../src/themeCatalog.js'
 import { bundledById } from '../src/background.js'
+import { canvasSize } from '../src/canvasModel.js'
+import { defaultQuoteId, readThemeCanvas } from '../src/studioData.js'
+
+test('presets default to a Daily quote in the lower right until a canvas is saved', () => {
+  const canvas = readThemeCanvas(defaultThemeId)
+  assert.equal(canvas.layers.length, 1)
+  const [quote] = canvas.layers
+  assert.equal(quote.id, defaultQuoteId)
+  assert.equal(quote.props.kind, 'quote')
+  assert.equal(quote.x + quote.width, canvasSize.width)
+  assert.equal(quote.y + quote.height, canvasSize.height)
+  assert.equal(readThemeCanvas(defaultThemeId, { layers: [] }).layers.length, 0)
+  assert.equal(readThemeCanvas('theme:custom').layers.length, 0)
+  const edited = { ...quote, x: 50, y: 40, hidden: true }
+  assert.deepEqual(readThemeCanvas(defaultThemeId, { layers: [edited] }).layers, [edited])
+})
 
 test('gallery presets have bilingual names and wallpaper assets', () => {
   assert.equal(themes.length, 51)

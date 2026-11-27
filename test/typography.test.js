@@ -55,15 +55,27 @@ test('random quote excludes the previous choice when possible', () => {
   assert.notEqual(randomQuote(previous.id, () => 0).id, previous.id)
 })
 
-test('a 28-day quote cycle includes all 20 Scripture entries once with both languages', () => {
-  const rotation = Array.from({ length: 28 }, (_, day) => dailyQuote(day))
-  assert.equal(new Set(rotation.map((entry) => entry.id)).size, 28)
-  assert.equal(rotation.filter((entry) => entry.source === 'scripture').length, 20)
+test('a 34-day quote cycle includes all 26 Scripture entries once with both languages', () => {
+  const rotation = Array.from({ length: 34 }, (_, day) => dailyQuote(day))
+  assert.equal(new Set(rotation.map((entry) => entry.id)).size, 34)
+  assert.equal(rotation.filter((entry) => entry.source === 'scripture').length, 26)
   for (const entry of rotation) {
     assert.ok(entry.texts.every(Boolean))
     if (entry.source === 'scripture') assert.ok(entry.references.every(Boolean))
   }
   const passage = rotation.find((entry) => entry.id === 'scripture-see-the-father')
   assert.equal(passage.texts[1], 'Ai thấy Thầy là thấy Chúa Cha.')
-  assert.equal(dailyQuote(28), rotation[0])
+  const newReferences = [
+    ['scripture-do-not-worry', 'Matthew 6:34', 'Mt 6,34'],
+    ['scripture-speck-and-beam', 'Matthew 7:3', 'Mt 7,3'],
+    ['scripture-do-not-judge', 'Luke 6:37', 'Lc 6,37'],
+    ['scripture-yes-and-no', 'Matthew 5:37', 'Mt 5,37'],
+    ['scripture-from-within', 'Mark 7:20–23', 'Mc 7,20–23'],
+    ['scripture-give-in-secret', 'Matthew 6:3–4', 'Mt 6,3–4'],
+    ['scripture-fast-in-secret', 'Matthew 6:17–18', 'Mt 6,17–18'],
+  ]
+  for (const [id, en, vi] of newReferences) {
+    assert.deepEqual(rotation.find((entry) => entry.id === id)?.references, [en, vi])
+  }
+  assert.equal(dailyQuote(34), rotation[0])
 })

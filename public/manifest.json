@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "New Tab Studio with Wallpapers & Widgets",
-  "short_name": "New Tab Studio",
+  "name": "Mango New Tab Studio Wallpapers & Widgets",
+  "short_name": "Mango Studio",
   "description": "__MSG_extensionDescription__",
-  "version": "1.1.4",
+  "version": "1.1.0",
   "minimum_chrome_version": "111",
   "default_locale": "en",
   "chrome_url_overrides": { "newtab": "index.html" },

@@ -4,7 +4,7 @@ import { localCanvasPictures, readCanvas } from './canvasModel.js'
 import { personalTypes, readWidgetData } from './widgetModel.js'
 import { hasEffects, readEffects } from './effects.js'
 import { assetReferences, catalogTheme, cleanName, defaultWorkspace, defaultWorkspaceId, designParts,
-  isCustomThemeId, isThemeId, readDesign, readDesignPart, remapDesign, themeRecord } from './studioData.js'
+  isCustomThemeId, isThemeId, readDesign, readDesignPart, readThemeCanvas, remapDesign, themeRecord } from './studioData.js'
 
 const databaseName = 'newtab-studio'
 const activeId = 'activeTheme'
@@ -127,7 +127,7 @@ export function readActiveSelection(requestedSelection) {
       overrides: selection.overrides === undefined ? document?.overrides ?? null : selection.overrides,
       background: selection.useBackground && document?.background ? readBackground(document.background) : null,
       textLayers: readTextLayers(document?.textLayers),
-      canvas: readCanvas(document?.canvas),
+      canvas: readThemeCanvas(selection.themeId, document?.canvas),
       effects: readEffects(document?.effects),
     }
   })
@@ -137,6 +137,7 @@ export function readThemeDesign(themeId, part) {
   return transaction(part ? ['themes', 'drafts'] : ['themes'], 'readonly', async (store) => {
     const theme = await result(store('themes').get(themeId))
     const design = readDesign(theme)
+    design.canvas = readThemeCanvas(themeId, theme?.canvas)
     const draft = part && await result(store('drafts').get(draftId(themeId, part)))
     return draft ? { ...design, [part]: draft.value } : design
   })
@@ -165,7 +166,7 @@ export async function saveActiveSelection(selection, {
       ? editedBackground.type === 'preset' ? null : editedBackground
       : saved?.background ?? null
 
-    const canvasInput = typeof canvas === 'function' ? canvas(readCanvas(saved?.canvas)) : canvas
+    const canvasInput = typeof canvas === 'function' ? canvas(readThemeCanvas(selection.themeId, saved?.canvas)) : canvas
     const nextCanvas = readCanvas(editingCanvas ? canvasInput : saved?.canvas)
     const referenced = new Set([
       ...localPictureIds(editedBackground),
@@ -178,7 +179,7 @@ export async function saveActiveSelection(selection, {
       const nextText = readTextLayers(editingText ? textLayers : saved?.textLayers)
       const nextEffects = readEffects(editingEffects ? effects : saved?.effects)
       const withEffects = hasEffects(nextEffects)
-      if (custom || nextBackground || nextText.length > 0 || nextCanvas.layers.length > 0 || nextCanvas.widgetLayout || withEffects) {
+      if (custom || nextBackground || nextText.length > 0 || editingCanvas || saved?.canvas || withEffects) {
         const phase4 = editingCanvas || saved?.schemaVersion >= 3
         const phase5 = saved?.schemaVersion >= 4 || Boolean(nextCanvas.widgetLayout) || nextCanvas.layers.some((layer) => layer.type === 'widget')
         const phase6 = saved?.schemaVersion >= 5 || withEffects
@@ -333,6 +334,7 @@ export async function saveCustomTheme({ id, sourceId, workspaceId, name, overrid
     const active = !id && await result(store('studioSettings').get(activeId))
     const colors = id ? saved.overrides : overrides ?? (active?.themeId === input ? active.overrides : saved?.overrides)
     const design = readDesign(saved)
+    design.canvas = readThemeCanvas(input, saved?.canvas)
     const layers = id ? new Map() : new Map(design.canvas.layers.map((layer) => [layer.id, crypto.randomUUID()]))
     const theme = themeRecord({
       ...remapDesign(design, new Map(), layers), presetId: saved?.presetId ?? input, workspaceId,

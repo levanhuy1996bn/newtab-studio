@@ -213,13 +213,31 @@ function Notes({ id, language, live }) {
 
 function Quote({ language, live }) {
   const now = useNow(10000)
-  const entry = dailyQuote(localDay(now))
+  const day = localDay(now)
+  const [browse, setBrowse] = useState(null)
+  const body = useRef(null)
+  const entry = dailyQuote(day + (browse?.day === day ? browse.offset : 0))
   const locale = language === 'vi' ? 1 : 0
-  return <div key={entry.id} className="widget-quote-body" tabIndex={live ? 0 : undefined} role="region"
-    aria-label={t('widget_quote', language)}>
-    {entry.references && <cite>{entry.references[locale]}{language === 'en' && ' · WEB'}</cite>}
-    <blockquote>{entry.texts[locale]}</blockquote>
-  </div>
+
+  function move(step) {
+    setBrowse((previous) => ({ day, offset: (previous?.day === day ? previous.offset : 0) + step }))
+  }
+
+  useEffect(() => { body.current.scrollTop = 0 }, [entry.id, language])
+
+  return <>
+    <div ref={body} className="widget-quote-body" tabIndex={live ? 0 : undefined} role="region"
+      aria-label={t('widget_quote', language)} aria-live={live ? 'polite' : undefined} aria-atomic={live || undefined}>
+      {entry.references && <cite>{entry.references[locale]}</cite>}
+      <blockquote>{entry.texts[locale]}</blockquote>
+    </div>
+    {live && <div className="widget-quote-controls">
+      <button type="button" aria-label={t('widgetPreviousQuote', language)} title={t('widgetPreviousQuote', language)}
+        onClick={() => move(-1)}><ArrowLeft size={14} aria-hidden="true" /></button>
+      <button type="button" aria-label={t('widgetNextQuote', language)} title={t('widgetNextQuote', language)}
+        onClick={() => move(1)}><ArrowRight size={14} aria-hidden="true" /></button>
+    </div>}
+  </>
 }
 
 function Timer({ id, kind, config, language, live }) {

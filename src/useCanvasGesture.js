@@ -9,7 +9,7 @@ function position(event, rect) {
   }
 }
 
-export function useCanvasGesture(onCommit) {
+export function useCanvasGesture(onCommit, canSnapTo = () => true) {
   const planeRef = useRef(null)
   const session = useRef(null)
   const [preview, setPreview] = useState(null)
@@ -39,7 +39,7 @@ export function useCanvasGesture(onCommit) {
     session.current = {
       mode, rect, point, layers, items, grid, plane, pointerId: event.pointerId, next: null,
       startX: event.clientX, startY: event.clientY,
-      others: layers.filter((layer) => !layer.hidden && !items.includes(layer)),
+      others: layers.filter((layer) => !layer.hidden && !items.includes(layer) && canSnapTo(layer)),
       pivot: center(bounds(items)),
       detach() {
         window.removeEventListener('pointermove', move)

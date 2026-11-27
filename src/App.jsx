@@ -14,6 +14,8 @@ import { hasClockWidget } from './widgetModel.js'
 import { EffectsStudio } from './EffectsStudio.jsx'
 import { motionAttributes, useMotionPreference } from './SceneEffects.jsx'
 import { TabWidgetEditor } from './TabWidgetEditor.jsx'
+import { CreatorProjects } from './CreatorProjects.jsx'
+import { defaultQuoteId } from './studioData.js'
 import { useThemeLibrary } from './useThemeLibrary.js'
 
 const MyThemes = lazy(() => import('./MyThemes.jsx').then((module) => ({ default: module.MyThemes })))
@@ -25,7 +27,7 @@ function Header({ page, setPage, language, setLanguage, ready }) {
       <div className="site-header-inner mx-auto flex items-center justify-between gap-3">
         <button className="brand" onClick={() => setPage('tab')}>
           <img className="brand-mark" src="./icons/icon-128.png" alt="" width="38" height="38" />
-          <span>NewTab <strong>Studio</strong></span>
+          <span>Mango New Tab <strong>Studio</strong></span>
         </button>
         <nav className="navigation flex items-center gap-1" aria-label={t('navigation', language)}>
           <button aria-current={page === 'tab' ? 'page' : undefined} onClick={() => setPage('tab')}>
@@ -296,12 +298,14 @@ function TabRail({ language, focusMode, onFocus, showResume, onResume, onCustomi
 
 function TabWidgetPages({ widgets, language, width, height, compact }) {
   const [page, setPage] = useState(0)
-  const columns = Math.max(1, Math.min(4, Math.floor((Math.min(width - 76, 920) + 10) / 220)))
+  const defaultQuoteOnly = widgets.length === 1 && widgets[0].id === defaultQuoteId
+  const columns = defaultQuoteOnly ? 1 : Math.max(1, Math.min(4, Math.floor((Math.min(width - 76, 920) + 10) / 220)))
   const perPage = columns * (height < 620 ? 1 : 2)
   const total = Math.ceil(widgets.length / perPage)
   const current = Math.min(page, total - 1)
   const visible = widgets.slice(current * perPage, (current + 1) * perPage)
-  return <div className="tab-widget-pages" style={{ '--widget-columns': columns }}>
+  return <div className={defaultQuoteOnly ? 'tab-widget-pages tab-widget-pages-default-quote' : 'tab-widget-pages'}
+    style={{ '--widget-columns': columns }}>
     <WidgetFlow layers={widgets} visibleIds={new Set(visible.map(({ id }) => id))} language={language} live
       className={compact ? 'tab-widget-flow widget-dock' : 'tab-widget-flow'} />
     {total > 1 && <div className="widget-pager" role="group" aria-label={t('widgetPage', language)}>
@@ -340,7 +344,10 @@ function NewTab({ theme, active, language, motion, focusMode, canvas = active.ca
         <Clock language={language} />
       </ThemeScene>
       {flow && <TabWidgetPages key={theme.id} {...{ widgets, language, width, height, compact }} />}
-      {!focusMode && <div className="tab-caption"><h1>{localized(theme.names, language)}</h1></div>}
+      {!focusMode && <div className="tab-bottom-bar">
+        {!canvasEditor && <CreatorProjects />}
+        <div className="tab-caption"><h1>{localized(theme.names, language)}</h1></div>
+      </div>}
     </main>
   )
 }

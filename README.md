@@ -1,6 +1,6 @@
-# NewTab Studio
+# Mango New Tab Studio
 
-Chrome Extension Manifest V3 thay thế trang New Tab. Bản 1.1.4 có 51 theme dựng sẵn, Background Studio, Text Editor, Free Canvas, 11 widget, Tự sắp xếp, hiệu ứng và lịch đổi theme. Dữ liệu thiết kế và widget được lưu cục bộ bằng IndexedDB. Giao diện có tiếng Anh và tiếng Việt.
+Chrome Extension Manifest V3 thay thế trang New Tab. Bản 1.1.0 có 51 theme dựng sẵn, Background Studio, Text Editor, Free Canvas, 11 widget, Tự sắp xếp, hiệu ứng và lịch đổi theme. Dữ liệu thiết kế và widget được lưu cục bộ bằng IndexedDB. Giao diện có tiếng Anh và tiếng Việt.
 
 ## Chạy trên máy
 

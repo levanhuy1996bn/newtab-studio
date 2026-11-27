@@ -1,13 +1,13 @@
-# New Tab Studio with Wallpapers & Widgets trên Chrome Web Store
+# Mango New Tab Studio Wallpapers & Widgets trên Chrome Web Store
 
-Nội dung để điền Developer Dashboard cho bản 1.1.4. Hình ảnh sử dụng logo **04 · Xoài thuôn**.
+Nội dung để điền Developer Dashboard cho bản 1.1.0. Hình ảnh sử dụng logo **04 · Xoài thuôn**.
 
 ## Thông tin gói
 
 | Trường | Nội dung |
 | --- | --- |
-| Tên trong gói | New Tab Studio with Wallpapers & Widgets |
-| Gói tiện ích | [newtab-studio-1.1.4.zip](../../newtab-studio-1.1.4.zip) |
+| Tên trong gói | Mango New Tab Studio Wallpapers & Widgets |
+| Gói tiện ích | `newtab-studio-1.1.0.zip` sau khi đóng gói từ mã nguồn hiện tại |
 | Ngôn ngữ mặc định | English. Thêm phần mô tả tiếng Việt ở ngôn ngữ Vietnamese. |
 | Danh mục đề xuất | Functionality & UI |
 | Video quảng cáo | Để trống nếu chưa có video. |
@@ -33,6 +33,7 @@ HÌNH NỀN VÀ BỐ CỤC
 
 WIDGET VÀ LỐI TẮT
 • Bật đồng hồ, tìm kiếm, lịch, việc cần làm, ghi chú hoặc bộ đếm ngay trên tab mới. Kéo widget đến vị trí bạn muốn, đổi kích thước và chỉnh độ đậm nền kính mờ.
+• Đọc châm ngôn mỗi ngày bằng tiếng Anh hoặc tiếng Việt. Dùng hai nút mũi tên để xem câu trước hoặc câu tiếp theo.
 • Lưu và sửa lối tắt ngay trên tab mới. Chọn Hay truy cập hoặc Mới truy cập để hiện các trang từ lịch sử Chrome sau khi cấp quyền tùy chọn.
 • Bật Chế độ tập trung khi muốn thu gọn giao diện.
 
@@ -62,6 +63,7 @@ WALLPAPERS AND LAYOUTS
 
 WIDGETS AND SHORTCUTS
 • Add clocks, search, a calendar, to-dos, notes, or timers right on your new tab. Drag widgets into place, resize them, and adjust the opacity of their glass backgrounds.
+• Read a daily quote in English or Vietnamese. Use the arrow buttons to browse previous and next quotes.
 • Save and edit shortcuts on the new tab page. Choose Frequently visited or Recently visited to display pages from Chrome history after granting optional access.
 • Turn on Focus Mode for a simpler view.
 
@@ -77,19 +79,19 @@ Designs and preferences are stored locally in your Chrome profile. Free to use, 
 ### Single purpose
 
 ```text
-New Tab Studio with Wallpapers & Widgets replaces Chrome’s New Tab page with a customizable page. Users can choose a theme, arrange widgets, and personalize the layout and wallpaper of their own New Tab page.
+Mango New Tab Studio Wallpapers & Widgets replaces Chrome’s New Tab page with a customizable page. Users can choose a theme, arrange widgets, and personalize the layout and wallpaper of their own New Tab page.
 ```
 
 ### Lý do yêu cầu quyền storage
 
 ```text
-New Tab Studio with Wallpapers & Widgets uses Chrome’s storage permission to keep the user’s extension preferences within the local Chrome profile. These include language, favorite themes, the theme schedule, and focus and performance settings. This lets the extension restore the user’s preferences across New Tab sessions.
+Mango New Tab Studio Wallpapers & Widgets uses Chrome’s storage permission to keep the user’s extension preferences within the local Chrome profile. These include language, favorite themes, the theme schedule, and focus and performance settings. This lets the extension restore the user’s preferences across New Tab sessions.
 ```
 
 ### Lý do yêu cầu quyền history tùy chọn
 
 ```text
-New Tab Studio with Wallpapers & Widgets requests the optional history permission only when the user selects Frequently visited or Recently visited in the Quick links widget. The widget reads page URLs, titles, and visit metadata from the local Chrome profile to display the selected view. History results are processed on the device and are not stored in the extension database, exported, or transferred to the developer. Manually saved shortcuts work without this permission.
+Mango New Tab Studio Wallpapers & Widgets requests the optional history permission only when the user selects Frequently visited or Recently visited in the Quick links widget. The widget reads page URLs, titles, and visit metadata from the local Chrome profile to display the selected view. History results are processed on the device and are not stored in the extension database, exported, or transferred to the developer. Manually saved shortcuts work without this permission.
 ```
 
 ### Mã từ xa
@@ -102,13 +104,13 @@ No. All executable code is included in the extension package. User-initiated sea
 https://gist.github.com/levanhuy1996bn/bacf71a7bbb6f358a9cc332e5ecf9d27
 ```
 
-Trước khi gửi bản 1.1.4, chủ tài khoản cập nhật Gist bằng chính sách [PRIVACY.md](PRIVACY.md) để cập nhật phần quyền lịch sử tùy chọn và bản sao lưu.
+Trước khi gửi bản 1.1.0, chủ tài khoản cập nhật Gist bằng chính sách [PRIVACY.md](PRIVACY.md) để cập nhật phần quyền lịch sử tùy chọn và bản sao lưu.
 
 ### Khai báo sử dụng dữ liệu và ba ô xác nhận
 
 Thiết kế, ảnh, ghi chú, công việc và tùy chọn được lưu trong hồ sơ Chrome. Extension không có hệ thống phân tích, backend hay đồng bộ của nhà phát triển. Khi người dùng gửi tìm kiếm hoặc mở lối tắt, Chrome điều hướng đến dịch vụ họ chọn. Truy vấn được gửi đến công cụ tìm kiếm đã chọn.
 
-Ba ô trong ảnh là phần xác nhận của chủ tài khoản Developer Dashboard. Đối chiếu chính sách và gói tải lên rồi tự xác nhận các nội dung về bán hoặc chuyển dữ liệu, giới hạn sử dụng theo mục đích duy nhất và không sử dụng dữ liệu cho mục đích tín dụng hoặc cho vay. Bản 1.1.4 khai báo `storage` và quyền tùy chọn `history`. Khi điền khai báo, đối chiếu phần lịch sử duyệt web với cách sử dụng mô tả trong chính sách. [Hướng dẫn điền Privacy](https://developer.chrome.com/docs/webstore/cws-dashboard-privacy)
+Ba ô trong ảnh là phần xác nhận của chủ tài khoản Developer Dashboard. Đối chiếu chính sách và gói tải lên rồi tự xác nhận các nội dung về bán hoặc chuyển dữ liệu, giới hạn sử dụng theo mục đích duy nhất và không sử dụng dữ liệu cho mục đích tín dụng hoặc cho vay. Bản 1.1.0 khai báo `storage` và quyền tùy chọn `history`. Khi điền khai báo, đối chiếu phần lịch sử duyệt web với cách sử dụng mô tả trong chính sách. [Hướng dẫn điền Privacy](https://developer.chrome.com/docs/webstore/cws-dashboard-privacy)
 
 ## Tài nguyên hình ảnh
 
@@ -123,7 +125,7 @@ Google yêu cầu icon và ít nhất một ảnh chụp màn hình, cho phép t
 
 ## Distribution và ghi chú review
 
-Tiện ích miễn phí. Chủ tài khoản chọn phạm vi hiển thị và khu vực phát hành trong Dashboard. Dùng bản 1.1.4 cho bộ nội dung này. [Hướng dẫn Distribution](https://developer.chrome.com/docs/webstore/cws-dashboard-distribution)
+Tiện ích miễn phí. Chủ tài khoản chọn phạm vi hiển thị và khu vực phát hành trong Dashboard. Dùng bản 1.1.0 cho bộ nội dung này. [Hướng dẫn Distribution](https://developer.chrome.com/docs/webstore/cws-dashboard-distribution)
 
 Nếu điền trường **Test instructions**, dùng đoạn sau.
 
