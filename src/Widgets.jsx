@@ -5,6 +5,7 @@ import { loadWidgetData, saveWidgetData, watchStudio } from './studioRepository.
 import { dailyQuote, localDay } from './typography.js'
 import { calendarModel, readWidgetData, searchUrl, timerAction, timerRemaining } from './widgetModel.js'
 import { Shortcuts } from './Shortcuts.jsx'
+import { AnalogDial } from './AnalogClock.jsx'
 
 const localeFor = (language) => language === 'vi' ? 'vi-VN' : 'en-US'
 
@@ -83,16 +84,7 @@ function Digital({ config, language }) {
 
 function Analog({ config, language }) {
   const now = useNow(config.seconds ? 1000 : 10000)
-  const hours = (now.getHours() % 12) * 30 + now.getMinutes() / 2
-  const minutes = now.getMinutes() * 6 + now.getSeconds() / 10
-  return (
-    <time className="widget-analog" dateTime={now.toISOString()} aria-label={now.toLocaleTimeString(localeFor(language))}>
-      {[12, 3, 6, 9].map((n) => <span className={'analog-n' + n} key={n} aria-hidden="true">{n}</span>)}
-      <i className="analog-hand analog-hour" style={{ rotate: hours + 'deg' }} aria-hidden="true" />
-      <i className="analog-hand" style={{ rotate: minutes + 'deg' }} aria-hidden="true" />
-      {config.seconds && <i className="analog-hand analog-second" style={{ rotate: now.getSeconds() * 6 + 'deg' }} aria-hidden="true" />}
-    </time>
-  )
+  return <AnalogDial config={config} now={now} locale={localeFor(language)} />
 }
 
 function Greeting({ config, language }) {
@@ -219,9 +211,33 @@ function Notes({ id, language, live }) {
   </>
 }
 
-function Quote({ language }) {
+function Quote({ language, live }) {
   const now = useNow(10000)
-  return <blockquote>{dailyQuote(localDay(now)).texts[language === 'vi' ? 1 : 0]}</blockquote>
+  const day = localDay(now)
+  const [browse, setBrowse] = useState(null)
+  const body = useRef(null)
+  const entry = dailyQuote(day + (browse?.day === day ? browse.offset : 0))
+  const locale = language === 'vi' ? 1 : 0
+
+  function move(step) {
+    setBrowse((previous) => ({ day, offset: (previous?.day === day ? previous.offset : 0) + step }))
+  }
+
+  useEffect(() => { body.current.scrollTop = 0 }, [entry.id, language])
+
+  return <>
+    <div ref={body} className="widget-quote-body" tabIndex={live ? 0 : undefined} role="region"
+      aria-label={t('widget_quote', language)} aria-live={live ? 'polite' : undefined} aria-atomic={live || undefined}>
+      {entry.references && <cite>{entry.references[locale]}</cite>}
+      <blockquote>{entry.texts[locale]}</blockquote>
+    </div>
+    {live && <div className="widget-quote-controls">
+      <button type="button" aria-label={t('widgetPreviousQuote', language)} title={t('widgetPreviousQuote', language)}
+        onClick={() => move(-1)}><ArrowLeft size={14} aria-hidden="true" /></button>
+      <button type="button" aria-label={t('widgetNextQuote', language)} title={t('widgetNextQuote', language)}
+        onClick={() => move(1)}><ArrowRight size={14} aria-hidden="true" /></button>
+    </div>}
+  </>
 }
 
 function Timer({ id, kind, config, language, live }) {

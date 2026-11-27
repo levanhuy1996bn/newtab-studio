@@ -1,4 +1,4 @@
-import { defaultThemeId, themesById } from './themeCatalog.js'
+import { defaultThemeId, isThemeId } from './themeCatalog.js'
 
 export const backdropEffects = ['none', 'snow', 'leaves', 'stars', 'rain', 'particles', 'color', 'parallax']
 export const entryEffects = ['none', 'fade', 'rise', 'float']
@@ -7,7 +7,7 @@ export const effectStrengths = ['subtle', 'normal', 'strong']
 export const scheduleLimit = 8
 
 const option = (values, value, fallback) => values.includes(value) ? value : fallback
-const themeId = (value, fallback = defaultThemeId) => themesById.has(value) ? value : fallback
+const themeId = (value, fallback = defaultThemeId) => isThemeId(value) ? value : fallback
 const time = (value, fallback) => typeof value === 'string' && /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value) ? value : fallback
 
 export function readEffects(input) {

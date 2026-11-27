@@ -4,7 +4,7 @@
 
 | Khóa | Kiểu | Giá trị mặc định |
 | --- | --- | --- |
-| `nts.language` | `en\|vi` | Suy ra từ ngôn ngữ trình duyệt |
+| `nts.language` | `en\|vi` | `en` khi chưa có lựa chọn hợp lệ |
 | `nts.activeTheme` | `{ version: 1, themeId: string, overrides: null \| { base: string, accent: string } }` | Dữ liệu Phase 1 được đọc trước lần áp dụng đầu tiên trên Phase 2 |
 | `nts.favorite.<themeId>` | boolean | false |
 
@@ -42,7 +42,7 @@ Store `themes` lưu `{ id, schemaVersion: 2, background, textLayers, updatedAt }
 - Lớp có `id, type, name, x, y, width, height, rotation, opacity, locked, hidden, groupId, props`. Kích thước tối thiểu 24 px, rotation biểu diễn theo độ và opacity 0–100. Phần hình vượt mặt phẳng được cắt khi dựng.
 - `type` nhận `rect, ellipse, frame, sticker, image, text`. Frame có `stroke`, sticker có `symbol`, image có `assetId`, text có `text, font, size`. Mỗi lớp có màu, trừ lớp ảnh dùng hình gốc.
 - `groupId` có tối thiểu hai thành viên. Nhân bản tạo ID lớp và ID nhóm mới, giữ quan hệ giữa các lớp được nhân bản.
-- Bản ghi cũ đọc thành canvas rỗng. Chỉ ghi v3 khi lưu canvas lần đầu hoặc cập nhật document đã ở v3. Các phần nền, chữ và canvas vẫn tách riêng trong document.
+- Bản ghi cũ của preset thiếu canvas nhận lớp Daily quote mặc định khi đọc để hiển thị. Giữ canvas đã lưu, kể cả mảng lớp rỗng. Các phần nền, chữ và canvas vẫn tách riêng trong document.
 
 ## Phase 5 · IndexedDB v2 và theme document v4
 
@@ -58,20 +58,13 @@ Store `themes` lưu `{ id, schemaVersion: 2, background, textLayers, updatedAt }
 - `effects` có `backdrop`, `text`, `widget`, `speed`, `strength` và `finish`. Bản ghi v1–v4 hoặc bản ghi thiếu cấu hình được đọc với hiệu ứng tắt. IndexedDB tiếp tục dùng v2. Tệp xuất bố cục v1 có trường `effects` tùy chọn.
 - `nts.schedule`, `nts.focusMode` và `nts.performanceMode` nằm trong `chrome.storage.local`. Lựa chọn thủ công khi bật lịch nằm trong `sessionStorage` của tab và chỉ ghi thiết kế vào IndexedDB nếu chỉnh theme. Lựa chọn toàn hồ sơ lưu ở `studioSettings` theo cách hiện tại.
 
-## Mở rộng ở Phase 7
+## Phase 7 · IndexedDB v3 và bản thiết kế cá nhân
 
-Từ 0.6.1, nền `image` và `slideshow` có `fit` tùy chọn. `cover` phủ khung theo tọa độ và zoom đã lưu, `contain` căn giữa và giữ trọn ảnh bằng CSS `scale-down`. Bản ghi thiếu `fit` đọc thành `cover`. IndexedDB tiếp tục dùng phiên bản 2.
+- V3 bổ sung `workspaces` và `drafts` trong lần mở đầu tiên. Dữ liệu từ v1–v2 giữ nguyên ID và được chuẩn hóa khi đọc. Các bản thiết kế v1–v5 vẫn dùng ID preset như trước. Theme cá nhân dùng ID `theme:<uuid>`, `schemaVersion: 6`, có `presetId`, `name`, `workspaceId`, bảng màu tùy chỉnh và các phần thiết kế hiện có.
+- Workspace mặc định `default` được dựng khi đọc. Workspace tự tạo lưu `{ id, name }`. Gỡ workspace chuyển theme về mặc định trong cùng transaction.
+- `drafts` lưu `{ id: themeId + "|" + part, themeId, part, value }` cho nền, chữ, canvas và hiệu ứng. Bản nháp được đọc khi mở trình chỉnh tương ứng. Áp dụng ghi thiết kế và xóa bản nháp đã áp dụng cùng transaction.
+- `newtab-studio.theme` v1 chứa theme và ảnh được tham chiếu. `newtab-studio.backup` v1 chứa các theme, ảnh tải lên, workspace, bản nháp, dữ liệu widget, tùy chọn và theme đang dùng. Ảnh mã hóa Base64 kèm SHA-256, được kiểm MIME và giải mã trước khi ghi. Thumbnail tái tạo khi nhập. Hỗ trợ tệp layout v1 dùng ảnh có sẵn trong gói.
+- Nhập thành bản sao remap ID theme, workspace, ảnh và lớp canvas, giữ cấu hình cục bộ hiện tại. Khôi phục đầy đủ thay dữ liệu trong một transaction IndexedDB. Cùng transaction ghi tùy chọn chờ đồng bộ. Nếu Chrome chưa ghi được vào `chrome.storage.local`, dữ liệu nhập và tùy chọn vẫn đọc được từ bản ghi này, tiện ích thử lại khi mở.
+- Bản sao lưu đầy đủ chứa dữ liệu riêng do người dùng tạo. Bản xuất theme chứa thiết kế và cấu hình liên kết trong thiết kế. Lịch sử Chrome chỉ được đọc để hiển thị và không nằm trong tệp xuất.
 
-| Store IndexedDB | Khóa | Trường chính |
-| --- | --- | --- |
-| themes | id | schemaVersion, name, background, canvas, layers, effects, updatedAt, revision |
-| assets | id | kind, mime, width, height, bytes, blob, createdAt, attribution |
-| drafts | themeId | theme, baseRevision, updatedAt |
-| widgets | id | type, schemaVersion, payload, updatedAt |
-| workspaces | id | name, themeIds, updatedAt |
-
-- `background` dùng hợp kiểu `solid | gradient | image | slideshow`. Ảnh tham chiếu assetId, vị trí dùng phần trăm, zoom dương và filter hữu hạn.
-- Widget bổ sung cấu hình hình thức trong layer và tham chiếu nội dung tùy loại. Theme di động loại nội dung todo và note cá nhân.
-- Theme export chứa `format, schemaVersion, theme, assets`. Backup thêm `workspaces, drafts, widgets, preferences`. Chọn định dạng đóng gói tại Phase 7 sau khi thử tệp lớn và giới hạn import.
-- Import xác thực schema, MIME/hash, liên kết, đường dẫn và giới hạn kích thước trước khi lưu. Migration nguồn cũ đi theo từng version. ID trùng được remap kèm tham chiếu.
-- Restore ghi thế hệ dữ liệu mới trong transaction IndexedDB, chuyển con trỏ trong chrome.storage.local sau khi commit, dọn thế hệ cũ sau khi công bố thành công. Nếu bước đổi con trỏ thất bại, tiếp tục sử dụng thế hệ cũ và xử lý staging sau lần mở tiếp theo.
+- Từ 1.1.0, đồng hồ kim lưu `props.config.face` và `props.config.markings`. Bản ghi cũ đọc mặc định `ivory` và `numbers`; tùy chọn kim giây cũ giữ nguyên. Kích thước widget tiếp tục dùng `width` và `height` của lớp canvas.

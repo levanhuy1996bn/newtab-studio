@@ -4,6 +4,7 @@ import { t } from './i18n.js'
 import { StudioColor, StudioRange } from './StudioFields.jsx'
 import { textFonts } from './typography.js'
 import { httpUrl, searchEngines } from './widgetModel.js'
+import { AnalogOptions } from './AnalogClock.jsx'
 
 export function canvasLayerName(layer, language) {
   if (layer.name) return layer.name
@@ -69,7 +70,8 @@ function WidgetSettings({ props, update, language }) {
     <Field text label={t('widgetHeading', language)} value={config.title} update={(title) => patch({ title })} />
     {field('surface', ['glass', 'paper', 'clear'].map((id) => [id, t('widgetSurface_' + id, language)]))}
     {kind === 'digital' && field('hourCycle', [['24', '24h'], ['12', '12h']])}
-    {['digital', 'analog'].includes(kind) && <label className="text-checkbox">
+    {kind === 'analog' && <AnalogOptions config={config} language={language} onChange={patch} />}
+    {kind === 'digital' && <label className="text-checkbox">
       <input type="checkbox" checked={config.seconds} onChange={(event) => patch({ seconds: event.target.checked })} />
       {t('widgetSeconds', language)}
     </label>}

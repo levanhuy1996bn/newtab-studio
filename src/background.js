@@ -1,4 +1,5 @@
 import { animeWallpapers } from './animeWallpapers.js'
+import { spaceWallpapers } from './spaceWallpapers.js'
 
 export const imageTypes = ['image/jpeg', 'image/png', 'image/webp']
 export const maxImageBytes = 15 * 1024 * 1024
@@ -21,16 +22,16 @@ export const bundledPictures = [
   { id: 'bundled:blue-marble', names: ['Blue Marble', 'Trái Đất xanh'], file: 'blue-marble.jpg', credit: 'NASA Earth Observatory' },
   { id: 'bundled:mars-dunes', names: ['Martian Dunes', 'Cồn cát sao Hỏa'], file: 'mars-dunes.jpg', credit: 'NASA/JPL-Caltech/University of Arizona' },
   { id: 'bundled:cosmic-cliffs', names: ['Cosmic Cliffs', 'Vách đá vũ trụ'], file: 'cosmic-cliffs.jpg', credit: 'NASA, ESA, CSA, STScI' },
-  { id: 'bundled:forest-road', names: ['Forest Road', 'Đường xuyên rừng'], file: 'forest-road.webp', credit: 'NewTab Studio · ImageGen' },
-  { id: 'bundled:summit-view', names: ['Summit View', 'Nhìn từ đỉnh núi'], file: 'summit-view.webp', credit: 'NewTab Studio · ImageGen' },
-  { id: 'bundled:cedar-path', names: ['Cedar Path', 'Lối mòn rừng tuyết tùng'], file: 'cedar-path.webp', credit: 'NewTab Studio · ImageGen' },
-  { id: 'bundled:summit-of-clouds', names: ['Summit of Clouds', 'Đỉnh núi trên biển mây'], file: 'summit-of-clouds.webp', credit: 'NewTab Studio · ImageGen' },
-  { id: 'bundled:coastal-train', names: ['Coastal Train', 'Chuyến tàu ven biển'], file: 'coastal-train.webp', credit: 'NewTab Studio · ImageGen' },
-  { id: 'bundled:village-after-rain', names: ['Village After Rain', 'Ngõ làng sau mưa'], file: 'village-after-rain.webp', credit: 'NewTab Studio · ImageGen' },
-  { id: 'bundled:evening-ferry', names: ['Evening Ferry', 'Bến đò chiều muộn'], file: 'evening-ferry.webp', credit: 'NewTab Studio · ImageGen' },
-  { id: 'bundled:lanterns-after-rain', names: ['Lanterns After Rain', 'Đèn làng sau mưa'], file: 'lanterns-after-rain.webp', credit: 'NewTab Studio · ImageGen' },
-  ...animeWallpapers.map(([id, en, vi]) => ({
-    id: 'bundled:' + id, names: [en, vi], file: id + '.webp', credit: 'NewTab Studio · ImageGen',
+  { id: 'bundled:forest-road', names: ['Forest Road', 'Đường xuyên rừng'], file: 'forest-road.webp', credit: 'Mango New Tab Studio · ImageGen' },
+  { id: 'bundled:summit-view', names: ['Summit View', 'Nhìn từ đỉnh núi'], file: 'summit-view.webp', credit: 'Mango New Tab Studio · ImageGen' },
+  { id: 'bundled:cedar-path', names: ['Cedar Path', 'Lối mòn rừng tuyết tùng'], file: 'cedar-path.webp', credit: 'Mango New Tab Studio · ImageGen' },
+  { id: 'bundled:summit-of-clouds', names: ['Summit of Clouds', 'Đỉnh núi trên biển mây'], file: 'summit-of-clouds.webp', credit: 'Mango New Tab Studio · ImageGen' },
+  { id: 'bundled:coastal-train', names: ['Coastal Train', 'Chuyến tàu ven biển'], file: 'coastal-train.webp', credit: 'Mango New Tab Studio · ImageGen' },
+  { id: 'bundled:village-after-rain', names: ['Village After Rain', 'Ngõ làng sau mưa'], file: 'village-after-rain.webp', credit: 'Mango New Tab Studio · ImageGen' },
+  { id: 'bundled:evening-ferry', names: ['Evening Ferry', 'Bến đò chiều muộn'], file: 'evening-ferry.webp', credit: 'Mango New Tab Studio · ImageGen' },
+  { id: 'bundled:lanterns-after-rain', names: ['Lanterns After Rain', 'Đèn làng sau mưa'], file: 'lanterns-after-rain.webp', credit: 'Mango New Tab Studio · ImageGen' },
+  ...[...animeWallpapers, ...spaceWallpapers].map(([id, en, vi]) => ({
+    id: 'bundled:' + id, names: [en, vi], file: id + '.webp', credit: 'Mango New Tab Studio · ImageGen',
   })),
 ]
 export const bundledById = new Map(bundledPictures.map((picture) => [picture.id, picture]))

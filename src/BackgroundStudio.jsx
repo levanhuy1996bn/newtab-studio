@@ -1,3 +1,4 @@
+import { useThemeDraft } from './useThemeDraft.js'
 import { useEffect, useState } from 'react'
 import { ArrowDown, ArrowUp, Check, Image, Layers, Palette, Square, X } from 'lucide-react'
 import { AssetLibrary } from './AssetLibrary.jsx'
@@ -111,11 +112,12 @@ export function BackgroundStudio({ theme, overrides, language, onApply, onApplie
   const [canvas, setCanvas] = useState(null)
   const [failedToRead, setFailedToRead] = useState(false)
   const [saving, setSaving] = useState(false)
+  const draftStatus = useThemeDraft(theme.id, 'background', draft)
   const palette = sceneColors(theme, overrides)
 
   useEffect(() => {
     let alive = true
-    readThemeDesign(theme.id).then((saved) => {
+    readThemeDesign(theme.id, 'background').then((saved) => {
       if (alive) {
         setDraft(saved.background ?? { type: 'preset' })
         setTextLayers(saved.textLayers)
@@ -149,7 +151,7 @@ export function BackgroundStudio({ theme, overrides, language, onApply, onApplie
 
   async function apply() {
     setSaving(true)
-    if (await onApply(theme.id, overrides, { background: draft })) onApplied()
+    if (await onApply(theme.id, overrides, { background: draft, draftPart: 'background' })) onApplied()
     else setSaving(false)
   }
 
@@ -163,6 +165,7 @@ export function BackgroundStudio({ theme, overrides, language, onApply, onApplie
         <button className="primary-button" type="button" disabled={!draft || saving || needsImage(draft)} onClick={apply}>
           <Check size={17} aria-hidden="true" /> {t(saving ? 'working' : 'applyBackground', language)}
         </button>
+        {draftStatus && <p className="studio-muted" role="status">{t(draftStatus, language)}</p>}
       </div>
       {failedToRead && <p className="error-message" role="alert">{t('libraryError', language)}</p>}
       {!failedToRead && !draft && <p className="studio-muted" role="status">{t('libraryLoading', language)}</p>}

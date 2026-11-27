@@ -1,5 +1,88 @@
 # Tiến độ
 
+## 2026-11-27 · Mô tả cửa hàng cho 1.1.0
+
+- Cập nhật mô tả dài EN/VI trong `docs/chrome-web-store/LISTING.md` để nêu Châm ngôn mỗi ngày. Tóm tắt trong gói đã ghi đúng 51 hình nền. Đối chiếu nội dung với mã và kiểm tra `git diff --check`. Thay đổi nằm trong tài liệu cửa hàng.
+
+## 2026-11-27 · More by the Creator và widget mặc định
+
+- New Tab có nút More by the Creator ↗ ở góc dưới bên trái. Bảng tiếng Anh hiển thị Share Ups and Downs, Developer Toolkit, 3D Football Manager với biểu tượng quả bóng và Learning Games for Kids. Mỗi liên kết mở một tab riêng.
+- Daily quote xuất hiện sẵn ở góc dưới bên phải cho preset chưa có canvas đã lưu. Người dùng vẫn có thể di chuyển, đổi kích thước hoặc ẩn widget.
+- `npm run check` đạt 31 bài. Chrome headless xác minh bố cục ở 1366 và 390 px, trạng thái ẩn qua tab mới, bốn địa chỉ liên kết, nút có mũi tên, biểu tượng quả bóng và nội dung tiếng Anh trong giao diện EN/VI. Bản build ở `dist/`, ZIP 1.1.0 chờ chủ dự án đóng lại.
+
+## 2026-11-27 · Mango New Tab Studio và bảy đoạn châm ngôn
+
+- Tên gói 1.1.0 là Mango New Tab Studio Wallpapers & Widgets. Nhãn tab và giao diện dùng Mango New Tab Studio. Đã cập nhật nội dung Chrome Web Store trong kho mã.
+- Thêm sáu mục và cập nhật mục Mc 7,20–23 sẵn có. Giữ nguyên câu chữ tiếng Việt người dùng gửi và bổ sung tiếng Anh từ World English Bible. Vòng Châm ngôn mỗi ngày có 34 mục, gồm 26 đoạn Kinh Thánh.
+- `npm run check` đạt 30 bài và tạo `dist/` bản 1.1.0. Chrome headless qua `chrome://newtab/` xác minh tên tiện ích, tiêu đề tab, nhãn nút tiện ích, vòng 34 câu, bảy trích dẫn yêu cầu ở cả hai ngôn ngữ và vị trí nút qua mọi câu. ZIP chờ chủ dự án đóng lại.
+
+## 2026-11-27 · Chuyển câu trong widget Châm ngôn mỗi ngày
+
+- Thêm nút mũi tên xem câu trước và câu tiếp theo bằng EN/VI. Bỏ hậu tố WEB khỏi trích dẫn và giữ tên sách, chương và câu. Widget dùng câu của ngày hiện tại khi mở tab mới hoặc sang ngày mới.
+- Hai nút nằm ở đáy widget trong Canvas tự do và bố cục thẻ. Thẻ giữ chiều cao và nội dung dài cuộn riêng.
+- `npm run check` đạt 30 bài. Chrome headless qua `chrome://newtab/` xác minh vòng 28 câu, 20 trích dẫn, chuyển ngôn ngữ, đặt lại khi đổi ngày và vị trí nút qua các câu ngắn và dài trong Canvas tự do và thẻ ở 390 px. Chủ dự án sẽ đóng lại ZIP 1.1.0.
+
+## 2026-11-27 · Kéo widget tới mép và mặc định tiếng Anh
+
+- Widget Canvas tự do trên New Tab dùng cả vùng nội dung bên cạnh thanh công cụ. Khung Visual Editor và các lớp trang trí giữ tỷ lệ 16:9. Tọa độ và dữ liệu đã lưu dùng cùng định dạng.
+- Bản cài mới dùng tiếng Anh. Lựa chọn EN/VI được giữ trong tùy chọn của hồ sơ Chrome.
+- `npm run check` đạt 30 bài kiểm thử và build bản 1.1.0. Chrome headless qua `chrome://newtab/` xác minh kéo và lưu vị trí sát các mép ở 1780 × 650, vùng chỉnh sửa ở 390 × 844, bố cục thẻ hẹp, tỷ lệ của lớp trang trí, tiếng Anh khi trình duyệt dùng tiếng Việt và lựa chọn tiếng Việt qua tab khác. ZIP chờ chủ dự án đóng lại.
+
+## 2026-11-27 · Đồng bộ bản phát hành 1.1.0
+
+- Đồng bộ phiên bản 1.1.0 trong package, lockfile, manifest và tài liệu. Changelog ghi chung các thay đổi hiện tại trong mốc 1.1.0.
+- `npm run check` đạt 30 bài kiểm thử và build `dist/`. Chrome headless mở New Tab, xác minh manifest 1.1.0, 51 hình nền, năm ảnh Doraemon ở EN/VI, ảnh xem thử và giữ nền khi mở tab khác.
+- Chủ dự án sẽ đóng lại ZIP từ bản hiện tại.
+
+## 2026-11-27 · Wallpaper và bộ lọc Doraemon
+
+- Thêm năm wallpaper vẽ lại bằng ImageGen từ ảnh nguồn người dùng cung cấp. Các bản mới mở rộng phố, đồi, rừng và biển theo khung ngang. Thêm bộ lọc Doraemon song song với Anime và Phong cảnh. Thư viện có 51 ảnh. [Ảnh và prompt](docs/ANIME_WALLPAPERS.md)
+- Đã xác minh năm ảnh WebP 1600 × 900 và năm ảnh thu nhỏ 480 × 270 trong gói thử cục bộ. `npm run package` chạy `npm run check`, đạt 30 bài kiểm thử. Chrome headless mở `chrome://newtab/`, kiểm tra số ảnh, bộ lọc EN/VI, ảnh thu nhỏ, xem thử, áp dụng và giữ ảnh khi mở tab khác.
+- ImageGen chặn cảnh hòa nhạc ngoài vũ trụ và ngắm trăng trên mái nhà. Hồ sơ Chrome sử dụng hằng ngày chưa được nạp lại trong đợt này.
+
+## 2026-11-27 · Xác minh icon trên thanh tab Chrome
+
+- Khai báo icon màu của nút tiện ích ở 16/32 px, với nhãn EN/VI. Nút mở NewTab Studio trong tab mới bằng service worker cục bộ. [Cách Chrome dùng icon của nút tiện ích](https://developer.chrome.com/docs/extensions/reference/api/action)
+- Sau khi bật và nạp lại tiện ích, Chrome có giao diện hiển thị logo Xoài thuôn màu vàng cam và lá xanh trên nhãn NewTab Studio ở `chrome://newtab/` và trên nút cạnh thanh địa chỉ. Bấm nút mở đúng trang NewTab Studio.
+- `npm run package` đạt 30 bài kiểm thử. Chrome headless xác minh thêm hành vi mở tab và các tệp favicon 16/32 px.
+
+## 2026-11-27 · Biển tên Học viện và favicon màu
+
+- Thêm hàng chữ đỏ Học viện Phụ nữ Việt Nam dọc cạnh mái nghiêng theo ảnh chụp, giữ VWA xanh ở cạnh bên kia. Thay WebP 1600 × 900 và ảnh thu nhỏ 480 × 270. [Ảnh và prompt ImageGen](docs/ANIME_WALLPAPERS.md)
+- Tăng độ phủ và độ tương phản màu cho mẫu Xoài thuôn, đồng bộ icon PNG 16/32/48/128 px và khai báo hai kích thước favicon New Tab. Chrome headless tải và giải mã cả hai favicon, kiểm tra điểm ảnh vàng cam và xanh lá. Chưa xác minh màu trên thanh tab của hồ sơ Chrome người dùng.
+- `npm run package` đạt 30 bài kiểm thử. Chrome New Tab kiểm tra ảnh thu nhỏ, xem thử, áp dụng và giữ nền qua tab khác.
+
+## 2026-11-27 · Khôi phục chữ VWA trên Đại lộ dưới mây nhạt
+
+- Đối chiếu ảnh gốc `assets/img_2.png` và phục hồi chữ VWA màu xanh trên mái tòa nhà cao bên phải bằng ImageGen. Xuất WebP 1600 × 900 và ảnh thu nhỏ 480 × 270. [Ảnh và prompt](docs/ANIME_WALLPAPERS.md)
+- `npm run package` chạy `npm run check`, đạt 30 bài kiểm thử. Chrome headless mở `chrome://newtab/`, kiểm tra ảnh thu nhỏ trong Phong cảnh, xem thử, áp dụng và giữ nền khi mở tab mới.
+
+## 2026-11-27 · Thay ảnh vũ trụ và thêm bộ lọc Conan
+
+- Gỡ Trái Đất xanh, Cồn cát sao Hỏa và Vách đá vũ trụ khỏi Thư viện preset. ID và ảnh vẫn được đóng gói để mở lại theme, nền và lịch đã lưu.
+- Bầu trời có ba ảnh ImageGen mới trong Thư viện, xuất WebP 1600 × 900 và ảnh thu nhỏ 480 × 270. Conan có bốn ảnh và các ảnh này vẫn có trong Anime. Tổng số preset là 46. [Ảnh và prompt](docs/WALLPAPERS.md#cảnh-vũ-trụ--110)
+- `npm run package` chạy `npm run check`, đạt 30 bài kiểm thử, xác minh Manifest V3. Chrome headless trong hồ sơ tạm mở `chrome://newtab/` để kiểm tra 46 thẻ, ba thẻ cũ đã ẩn, bốn thẻ Conan, ba ảnh mới ở EN/VI, preview 1600 × 900, áp dụng ảnh và giữ ảnh khi mở tab khác.
+- ImageGen chặn đầu ra Doraemon.
+
+## 2026-11-26 · Wallpaper anime và bộ lọc Phong cảnh
+
+- Vẽ lại 12 ảnh nguồn và thêm cảnh Conan ở ga ven biển. Thư viện tại mốc này có 46 hình nền. Ảnh mới dùng WebP 1600 × 900 và ảnh thu nhỏ 480 × 270. ImageGen không xuất cảnh Doraemon. [Bảng đối chiếu ảnh nguồn](docs/ANIME_WALLPAPERS.md)
+- Bộ lọc có Anime 40, Phong cảnh 43, Thiên nhiên 29, Hoài niệm 4, Bầu trời 9. Một ảnh có thể xuất hiện trong nhiều nhóm.
+- `npm run package` chạy `npm run check`, đạt 30 bài kiểm thử. Chrome xác minh danh mục EN/VI, tìm kiếm tiếng Việt không dấu, tải preview 1600 × 900, áp dụng và giữ ảnh ở tab mới, cùng bố cục thư viện ở 390 px.
+
+## 2026-11-26 · Đổi kích thước widget, đồng hồ và châm ngôn
+
+- Có thể kéo góc dưới phải hoặc dùng phím để đổi kích thước widget trên New Tab. Cài đặt mặt đồng hồ có bốn màu, chữ số/vạch/chấm và kim giây. Đồng hồ kim tự vừa khung và đã bỏ thanh cuộn ngang, dọc.
+- Widget dùng Be Vietnam Pro cục bộ. Phần nội dung châm ngôn dùng Lora. Vòng 28 ngày gồm 8 câu sẵn và 20 đoạn Kinh Thánh. Tiếng Việt giữ lời người dùng gửi, tiếng Anh trích từ World English Bible theo thứ tự sách Công giáo. Đoạn dài cuộn trong widget Châm ngôn. [Nguồn bản Anh](https://ebible.org/Scriptures/details.php?id=eng-web-c)
+- `npm run package` đạt 30 bài kiểm thử. Chrome kiểm tra đổi kích thước bằng chuột, bàn phím và cảm ứng, giữ kích thước khi mở tab khác, bốn mặt đồng hồ, cả hai trục cuộn bị tắt trong canvas và thẻ hẹp, phông đã tải và đoạn Kinh Thánh dài ở EN/VI.
+- Đã chuẩn bị mô tả và ảnh minh họa widget cho Store Listing. Bản cục bộ chờ chủ tài khoản gửi.
+
+## 2026-11-26 · Phase 7 · Theme cá nhân và sao lưu
+
+- Bản 1.1.0 thêm My Themes, nhóm workspace, bản nháp tự lưu, Settings, xuất theme kèm ảnh, nhập bản sao và khôi phục toàn bộ. ZIP và mô tả Chrome Web Store đã cập nhật. [Chi tiết triển khai](docs/phases/PHASE_07_RELEASE.md)
+- `npm run package` đạt 28 bài kiểm thử và xác minh Manifest V3 trong gói thử tại mốc triển khai Phase 7. Chrome 158 kiểm tra nâng IndexedDB v2 lên v3 với theme cũ, theme và bản sao lưu chuyển giữa hai hồ sơ, ảnh tải lên, ghi chú, bản nháp, workspace và tùy chọn. Xác minh bỏ tệp ảnh sai SHA-256, giữ nguyên dữ liệu khi giả lập hết dung lượng, thử lại thành công, đọc dữ liệu offline, nhân bản/chuyển/xóa theme và giao diện VI ở 390 px.
+- Đo trong Chrome headless hồ sơ tạm trên máy hiện tại. New Tab qua `chrome://newtab/` có ảnh nền giải mã sau khoảng 385–484 ms theo phép thăm dò. Khi mở trực tiếp trang extension, DOMContentLoaded khoảng 79 ms và ảnh nền báo tải xong khoảng 128 ms tính từ điều hướng.
+
 ## 2026-11-26 · Đồng bộ cấu hình với cách làm của DevPocket
 
 - Đưa lệnh nén vào `package.json`, bỏ script đóng gói riêng và thêm `npm run test:watch` bằng Node. Đồng bộ metadata lockfile với 1.0.0.

@@ -15,3 +15,10 @@ Nghiệm thu bằng cài sạch, nâng cấp, nhập/xuất và restore giữa h
 - Dành khung chính cho wallpaper, đặt điều hướng trong thanh bên trái và mở công cụ tùy chỉnh theo yêu cầu. Widget Trong mờ dùng nền bán trong suốt, giảm làm mờ khi bật Chế độ hiệu năng.
 - Tự sắp xếp phân trang theo chiều rộng và chiều cao. Canvas tự do dùng vị trí thiết kế trên desktop, và dùng thẻ ở chiều rộng tối đa 720 px như trước. Có thể cuộn riêng bên trong widget có danh sách dài.
 - Background Studio cho đặt lại điểm cắt giữa và chọn Vừa khung. Ảnh nhỏ có thể giữ kích thước gốc khi vừa khung. Tài nguyên mới **Đèn làng sau mưa** thuộc Anime và Hoài niệm.
+
+## Triển khai · 1.1.0
+
+- **Theme của tôi** lưu bản sao độc lập, cho nhân bản, đổi tên, chuyển workspace hoặc xuất kèm ảnh. Các trình chỉnh nền, chữ, canvas và hiệu ứng tự lưu bản nháp. Theme cá nhân có thể dùng trong lịch đổi theme.
+- **Cài đặt** có hướng dẫn, ngôn ngữ, chế độ tập trung và hiệu năng, cùng **Nhập và sao lưu**. Nhập hiển thị số theme, ảnh, workspace, bản nháp và bản ghi widget trước khi xác nhận.
+- Nhập thành bản sao giữ dữ liệu hiện tại và remap các tham chiếu. Khôi phục đầy đủ yêu cầu xác nhận, áp dụng một transaction và dùng bản ghi tùy chọn chờ đồng bộ nếu Chrome chưa ghi được. [Schema tệp xuất và backup](../DATA_SCHEMA.md)
+- Trang My Themes và Settings tải theo nhu cầu. Tệp truyền dữ liệu hiện giới hạn 160 MiB. Hai định dạng theme và backup dùng JSON.

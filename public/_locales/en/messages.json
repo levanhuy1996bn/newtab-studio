@@ -1,5 +1,8 @@
 {
+  "openStudio": {
+    "message": "Open Mango New Tab Studio"
+  },
   "extensionDescription": {
-    "message": "Customize your new tab with 33 wallpapers, draggable widgets, and shortcuts. No account required."
+    "message": "Customize your new tab with 51 wallpapers, draggable widgets, and shortcuts. No account required."
   }
 }

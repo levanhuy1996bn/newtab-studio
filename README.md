@@ -1,6 +1,6 @@
-# NewTab Studio
+# Mango New Tab Studio
 
-Chrome Extension Manifest V3 thay thế trang New Tab. Bản 0.6.8 có 33 theme dựng sẵn, Background Studio, Text Editor, Free Canvas, 11 widget, Tự sắp xếp, hiệu ứng và lịch đổi theme. Dữ liệu thiết kế và widget được lưu cục bộ bằng IndexedDB. Giao diện có tiếng Anh và tiếng Việt.
+Chrome Extension Manifest V3 thay thế trang New Tab. Bản 1.1.0 có 51 theme dựng sẵn, Background Studio, Text Editor, Free Canvas, 11 widget, Tự sắp xếp, hiệu ứng và lịch đổi theme. Dữ liệu thiết kế và widget được lưu cục bộ bằng IndexedDB. Giao diện có tiếng Anh và tiếng Việt.
 
 ## Chạy trên máy
 
@@ -37,6 +37,12 @@ Trong **Bố cục tiện ích trên tab mới**, chọn **Tự sắp xếp**, d
 Chọn **Tùy chỉnh → Hiệu ứng** trên New Tab để chỉnh và xem thử hoạt ảnh của theme đang dùng. Trang này cũng có lịch đổi theme ngày/đêm, khung giờ tùy chỉnh và Chế độ hiệu năng. **Chế độ tập trung** trên New Tab ẩn điều hướng và giữ đồng hồ cùng widget. [Hướng dẫn hiệu ứng và lịch theme](docs/phases/PHASE_06_EFFECTS.md)
 
 Hướng dẫn chính thức của Chrome. [Load an unpacked extension](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked)
+
+## Theme của tôi và sao lưu
+
+- Chọn **Tùy chỉnh → Theme của tôi** để lưu bản sao, đổi tên, chuyển workspace hoặc xuất theme kèm ảnh.
+- Trình chỉnh lưu bản nháp cục bộ. Bấm **Áp dụng** để đưa chỉnh sửa lên New Tab.
+- Chọn **Tùy chỉnh → Cài đặt → Nhập và sao lưu** để tải bản sao lưu đầy đủ, nhập thành bản sao hoặc khôi phục toàn bộ sang hồ sơ Chrome khác. [Chi tiết Phase 7](docs/phases/PHASE_07_RELEASE.md)
 
 ## Tài liệu
 

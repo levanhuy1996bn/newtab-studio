@@ -10,7 +10,7 @@ Phase 7 tạo bản phát hành. Kiểm tra chính sách và yêu cầu dashboar
 4. Chuẩn bị chính sách riêng tư phù hợp các tính năng thực tế, mô tả storage, tệp nhập/xuất, cách xóa dữ liệu và trường hợp mở công cụ tìm kiếm hoặc lối tắt bên ngoài.
 5. Giải trình quyền `storage` để lưu tùy chọn và quyền tùy chọn `history` cho Liên kết nhanh. Kiểm tra mục đích duy nhất là cá nhân hóa New Tab và rà toàn bộ mã/asset chạy local.
 
-## Tài liệu và ảnh bản 0.6.8
+## Tài liệu và ảnh bản 1.1.0
 
 - [Store Listing EN/VI và nội dung điền Privacy](chrome-web-store/LISTING.md)
 - [Logo xoài chữ X mẫu 01–03](chrome-web-store/logo-preview.png), [mẫu 04–06](chrome-web-store/logo-preview-v2.png) và [tệp SVG/PNG](chrome-web-store/logos/)

@@ -70,3 +70,9 @@
 | Chuyển từ 31/12 sang 1/1 | Lịch tự cập nhật ngày được đánh dấu |
 | Mở lại Chrome khi timer đang chạy | Mốc đích được giữ, kết quả dựa vào thời gian đã trôi qua |
 | Xuất JSON, tải offline và mở ở 320 px | JSON chỉ chứa bố cục. Widget xếp thành thẻ và tiếp tục đọc dữ liệu local |
+
+## Phase 7 · Kiểm tra giữa hai hồ sơ Chrome
+
+1. Ở hồ sơ nguồn, tải lên một ảnh và áp dụng. Lưu theme vào một workspace, thêm widget ghi chú và tạo một bản nháp nền chưa áp dụng.
+2. Xuất theme từ **Theme của tôi** và tải backup từ **Cài đặt → Nhập và sao lưu**. Trong hồ sơ đích, nhập theme và kiểm tra ảnh đi kèm. Nhập backup thành bản sao và đối chiếu theme, ảnh và widget. Kiểm tra dữ liệu cũ vẫn ở đó.
+3. Chọn khôi phục đầy đủ để kiểm tra theme đang dùng, workspace, bản nháp, ghi chú, ảnh và tùy chọn. Mở tab mới trong hồ sơ đích và thử lại khi offline. Kiểm tra tệp ảnh sai hash báo lỗi trước khi nhập. Giả lập lỗi ghi trong transaction và xác minh dữ liệu cũ còn nguyên trước khi thử lại.

@@ -1,3 +1,4 @@
+import { useThemeDraft } from './useThemeDraft.js'
 import { useEffect, useState } from 'react'
 import { Check, Plus, Trash2 } from 'lucide-react'
 import { readThemeDesign } from './studioRepository.js'
@@ -14,13 +15,13 @@ const effectFields = {
   speed: effectSpeeds, strength: effectStrengths, finish: ['once', 'loop'],
 }
 
-function ThemeChoice({ label, value, onChange, language }) {
+function ThemeChoice({ label, value, onChange, language, customThemes }) {
   const savedTheme = themesById.get(value)
   const savedThemeIsRetired = savedTheme && !themes.includes(savedTheme)
   return <label className="text-field"><span>{label}</span>
     <select value={value} onChange={(event) => onChange(event.target.value)}>
       {savedThemeIsRetired && <option value={value}>{localized(savedTheme.names, language)}</option>}
-      {themes.map((theme) => <option value={theme.id} key={theme.id}>{localized(theme.names, language)}</option>)}
+      {[...themes, ...customThemes].map((theme) => <option value={theme.id} key={theme.id}>{localized(theme.names, language)}</option>)}
     </select>
   </label>
 }
@@ -31,7 +32,7 @@ function TimeField({ label, value, onChange }) {
   </label>
 }
 
-function ScheduleForm({ schedule, language, onSave, onResume, tabSelection }) {
+function ScheduleForm({ schedule, language, onSave, onResume, tabSelection, customThemes }) {
   const [draft, setDraft] = useState(schedule)
   const [status, setStatus] = useState(null)
   const [saving, setSaving] = useState(false)
@@ -68,11 +69,11 @@ function ScheduleForm({ schedule, language, onSave, onResume, tabSelection }) {
     {mode === 'dayNight' && <>
       <div className="text-control-pair">
         <TimeField label={t('dayStart', language)} value={draft.day} onChange={(day) => update({ day })} />
-        <ThemeChoice label={t('dayTheme', language)} value={draft.dayThemeId} onChange={(dayThemeId) => update({ dayThemeId })} language={language} />
+        <ThemeChoice label={t('dayTheme', language)} value={draft.dayThemeId} onChange={(dayThemeId) => update({ dayThemeId })} language={language} customThemes={customThemes} />
       </div>
       <div className="text-control-pair">
         <TimeField label={t('nightStart', language)} value={draft.night} onChange={(night) => update({ night })} />
-        <ThemeChoice label={t('nightTheme', language)} value={draft.nightThemeId} onChange={(nightThemeId) => update({ nightThemeId })} language={language} />
+        <ThemeChoice label={t('nightTheme', language)} value={draft.nightThemeId} onChange={(nightThemeId) => update({ nightThemeId })} language={language} customThemes={customThemes} />
       </div>
     </>}
     {mode === 'custom' && <>
@@ -80,7 +81,7 @@ function ScheduleForm({ schedule, language, onSave, onResume, tabSelection }) {
       {draft.rules.map((rule, index) => <div className="effects-schedule-row" key={index} role="group" aria-label={t('scheduleSlot', language) + ' ' + (index + 1)}>
         <TimeField label={t('scheduleStart', language)} value={rule.start} onChange={(start) => updateRule(index, { start })} />
         <TimeField label={t('scheduleEnd', language)} value={rule.end} onChange={(end) => updateRule(index, { end })} />
-        <ThemeChoice label={t('scheduleTheme', language)} value={rule.themeId} onChange={(themeId) => updateRule(index, { themeId })} language={language} />
+        <ThemeChoice label={t('scheduleTheme', language)} value={rule.themeId} onChange={(themeId) => updateRule(index, { themeId })} language={language} customThemes={customThemes} />
         <button type="button" className="secondary-button" aria-label={t('scheduleRemove', language)}
           onClick={() => update({ rules: draft.rules.filter((_, row) => row !== index) })}><Trash2 size={16} aria-hidden="true" /></button>
       </div>)}
@@ -102,11 +103,12 @@ function EffectControls({ theme, design, current, motion, language, onApply, onA
   const [effects, setEffects] = useState(design.effects)
   const [saving, setSaving] = useState(false)
   const [preview, setPreview] = useState(0)
+  const draftStatus = useThemeDraft(theme.id, 'effects', effects)
   const auto = design.canvas.widgetLayout?.mode === 'auto'
 
   async function apply() {
     setSaving(true)
-    if (await onApply(theme.id, current?.overrides ?? null, { effects })) onApplied()
+    if (await onApply(theme.id, current?.overrides ?? theme.overrides ?? null, { effects, draftPart: 'effects' })) onApplied()
     else setSaving(false)
   }
 
@@ -132,17 +134,18 @@ function EffectControls({ theme, design, current, motion, language, onApply, onA
         <button type="button" className="primary-button" onClick={apply}>
           <Check size={16} aria-hidden="true" /> {t(saving ? 'working' : 'effectApply', language)}
         </button>
+        {draftStatus && <p className="studio-muted" role="status">{t(draftStatus, language)}</p>}
       </div>
     </fieldset>
   </div>
 }
 
-export function EffectsStudio({ theme, current, motion, language, onApply, onApplied, preferences }) {
+export function EffectsStudio({ theme, current, motion, language, onApply, onApplied, preferences, customThemes }) {
   const [design, setDesign] = useState(null)
   const [failed, setFailed] = useState(false)
   useEffect(() => {
     let cancel = false
-    readThemeDesign(theme.id).then((value) => { if (!cancel) setDesign(value) })
+    readThemeDesign(theme.id, 'effects').then((value) => { if (!cancel) setDesign(value) })
       .catch(() => { if (!cancel) setFailed(true) })
     return () => { cancel = true }
   }, [theme.id])
@@ -156,7 +159,7 @@ export function EffectsStudio({ theme, current, motion, language, onApply, onApp
     {design ? <EffectControls {...{ theme, design, current, motion, language, onApply, onApplied }} />
       : !failed && <p role="status">{t('loading', language)}</p>}
     <div className="effects-settings">
-      <ScheduleForm {...{ schedule, tabSelection, language }} onSave={setSchedule} onResume={resumeSchedule} />
+      <ScheduleForm {...{ schedule, tabSelection, language, customThemes }} onSave={setSchedule} onResume={resumeSchedule} />
       <section className="studio-panel effects-panel">
         <h2>{t('effectModes', language)}</h2>
         <label className="text-checkbox"><input type="checkbox" checked={focusMode} onChange={(event) => setFocusMode(event.target.checked)} />{t('focusMode', language)}</label>

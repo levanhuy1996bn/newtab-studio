@@ -1,16 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
 import { ChevronDown, X } from 'lucide-react'
 import { canvasLimit, makeLayer, readCanvas } from './canvasModel.js'
-import { moveLayers } from './canvasGeometry.js'
+import { moveLayers, resizeLayers } from './canvasGeometry.js'
 import { t } from './i18n.js'
 import { StudioError } from './studioRepository.js'
 import { useCanvasGesture } from './useCanvasGesture.js'
 import { insertWidget } from './widgetLayouts.js'
 import { widgetKinds } from './widgetModel.js'
+import { AnalogOptions } from './AnalogClock.jsx'
 
 const directions = { ArrowUp: [0, -1], ArrowDown: [0, 1], ArrowLeft: [-1, 0], ArrowRight: [1, 0] }
 
-function applyWidgetDraft(saved, original, draft, moved) {
+function applyWidgetDraft(saved, original, draft, layoutChanged) {
   const before = new Map(original.layers.map((layer) => [layer.id, layer]))
   const after = new Map(draft.map((layer) => [layer.id, layer]))
   const additions = draft.filter((layer) => !before.has(layer.id))
@@ -21,18 +22,26 @@ function applyWidgetDraft(saved, original, draft, moved) {
     if (!previous || !next || previous === next || layer.type !== 'widget') return layer
     const changes = {}
     if (previous.hidden !== next.hidden) changes.hidden = next.hidden
-    if (!layer.locked && (previous.x !== next.x || previous.y !== next.y)) {
-      changes.x = next.x
-      changes.y = next.y
+    if (!layer.locked) {
+      for (const key of ['x', 'y', 'width', 'height']) {
+        if (previous[key] !== next[key]) changes[key] = next[key]
+      }
     }
     if (previous.props.surfaceOpacity !== next.props.surfaceOpacity) {
       changes.props = { ...layer.props, surfaceOpacity: next.props.surfaceOpacity }
+    }
+    if (layer.props.kind === 'analog' && next.props.config !== previous.props.config) {
+      const config = { ...layer.props.config }
+      for (const key of ['face', 'markings', 'seconds']) {
+        if (previous.props.config[key] !== next.props.config[key]) config[key] = next.props.config[key]
+      }
+      changes.props = { ...(changes.props ?? layer.props), config }
     }
     return { ...layer, ...changes }
   })
   return {
     ...saved, layers: [...layers, ...additions],
-    ...(moved && { widgetLayout: { mode: 'free', order: saved.widgetLayout?.order ?? [] } }),
+    ...(layoutChanged && { widgetLayout: { mode: 'free', order: saved.widgetLayout?.order ?? [] } }),
   }
 }
 
@@ -41,7 +50,7 @@ export function TabWidgetEditor({ active, language, onApply, onClose, children }
   const [layers, setLayers] = useState(original.layers)
   const [selectedId, select] = useState('')
   const [pickerOpen, showPicker] = useState(true)
-  const [moved, setMoved] = useState(false)
+  const [layoutChanged, setLayoutChanged] = useState(false)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const savingRef = useRef(false)
@@ -49,12 +58,12 @@ export function TabWidgetEditor({ active, language, onApply, onClose, children }
 
   useEffect(() => { pickerButton.current?.focus() }, [])
 
-  function commitMove(next) {
+  function commitLayout(next) {
     if (next.every((layer, index) => layer === layers[index])) return
     setLayers(next)
-    setMoved(true)
+    setLayoutChanged(true)
   }
-  const gesture = useCanvasGesture(commitMove)
+  const gesture = useCanvasGesture(commitLayout, (layer) => layer.type === 'widget')
   const widgets = layers.filter((layer) => layer.type === 'widget')
   const visible = widgets.filter((layer) => !layer.hidden)
   const selected = visible.find((layer) => layer.id === selectedId)
@@ -84,7 +93,7 @@ export function TabWidgetEditor({ active, language, onApply, onClose, children }
     setSaving(true)
     const saved = await onApply(active.themeId, active.overrides, {
       keepBackground: true,
-      canvas: (latest) => applyWidgetDraft(latest, original, layers, moved),
+      canvas: (latest) => applyWidgetDraft(latest, original, layers, layoutChanged),
     })
     savingRef.current = false
     setSaving(false)
@@ -99,6 +108,13 @@ export function TabWidgetEditor({ active, language, onApply, onClose, children }
     gesture.begin(event, 'move', layers, [id], false)
   }
 
+  function onHandle(event, mode) {
+    event.stopPropagation()
+    if (!selected || savingRef.current) return
+    showPicker(false)
+    gesture.begin(event, mode, layers, [selected.id], false)
+  }
+
   function onKeyDown(event) {
     if (event.key === 'Escape' && !savingRef.current) {
       if (!gesture.cancel()) onClose()
@@ -108,15 +124,17 @@ export function TabWidgetEditor({ active, language, onApply, onClose, children }
     event.preventDefault()
     const [x, y] = directions[event.key]
     const step = event.shiftKey ? 24 : 4
-    const { items: [next] } = moveLayers([selected], x * step, y * step, { tolerance: 0 })
-    if (next.x !== selected.x || next.y !== selected.y) {
-      commitMove(layers.map((layer) => layer.id === selected.id ? next : layer))
+    const resize = event.altKey || event.target.classList.contains('canvas-resize')
+    const [next] = resize ? resizeLayers([selected], { x: x * step, y: y * step })
+      : moveLayers([selected], x * step, y * step).items
+    if (['x', 'y', 'width', 'height'].some((key) => next[key] !== selected[key])) {
+      commitLayout(layers.map((layer) => layer.id === selected.id ? next : layer))
     }
   }
 
   const editor = {
     widgetsOnly: true, planeRef: gesture.planeRef, selected: selected ? [selected.id] : [],
-    guides: gesture.preview?.guides ?? {}, onLayer, onKeyDown, onLostCapture: gesture.lostCapture,
+    guides: gesture.preview?.guides ?? {}, onLayer, onHandle, onKeyDown, onLostCapture: gesture.lostCapture,
   }
   const name = (layer) => layer.props.config.title || t('widget_' + layer.props.kind, language)
   const canvas = { ...original, layers: gesture.preview?.layers ?? layers }
@@ -169,12 +187,19 @@ export function TabWidgetEditor({ active, language, onApply, onClose, children }
           }} />
         <output>{selected.props.surfaceOpacity}%</output>
       </label>}
+      {selected?.props.kind === 'analog' && <AnalogOptions config={selected.props.config} language={language}
+        disabled={saving || Boolean(gesture.preview)} onChange={(values) => {
+          setLayers(layers.map((layer) => layer.id === selected.id ? {
+            ...layer, props: { ...layer.props, config: { ...layer.props.config, ...values } },
+          } : layer))
+        }} />}
       <button type="button" className="tab-widget-tool tab-widget-save" disabled={!dirty || saving || Boolean(gesture.preview)}
         onClick={save}>{t(saving ? 'widgetSavingTab' : 'widgetSaveTab', language)}</button>
       <button type="button" className="tab-widget-tool" aria-label={t('cancel', language)} title={t('cancel', language)}
         onClick={onClose} disabled={saving}><X size={17} aria-hidden="true" /></button>
     </div>
-    <p className="tab-widget-hint">{t(moved && original.widgetLayout?.mode === 'auto' ? 'widgetFreeAfterMove' : 'widgetDragHelp', language)}</p>
+    <p className="tab-widget-hint">{t('widgetDragHelp', language)}</p>
+    {layoutChanged && original.widgetLayout?.mode === 'auto' && <p className="tab-widget-hint">{t('widgetFreeAfterMove', language)}</p>}
     {error && <p className="tab-widget-hint" role="alert">{t(error, language)}</p>}
   </section>)
 }

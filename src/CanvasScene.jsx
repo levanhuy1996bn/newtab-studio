@@ -1,4 +1,4 @@
-import { Move, RotateCw } from 'lucide-react'
+import { Move, MoveDiagonal, RotateCw } from 'lucide-react'
 import { usePictureUrl } from './backgroundRendering.jsx'
 import { bounds } from './canvasGeometry.js'
 import { canvasSize } from './canvasModel.js'
@@ -17,17 +17,18 @@ function artwork(layer, language, live) {
   if (type === 'widget') return <Widget layer={layer} language={language} live={live} />
   if (type === 'sticker') return <span className="canvas-symbol" aria-hidden="true">{props.symbol}</span>
   if (type === 'text') return <span className="canvas-lettering" style={{
-    fontFamily: textFonts[props.font].stack, fontSize: props.size / 12 + 'cqw',
+    fontFamily: textFonts[props.font].stack, fontSize: `calc(${props.size / 12} * var(--canvas-unit))`,
   }}>{props.text}</span>
-  return <div className="canvas-shape" data-shape={type} style={{ '--frame-width': (props.stroke ?? 0) / 12 + 'cqw' }} aria-hidden="true" />
+  return <div className="canvas-shape" data-shape={type}
+    style={{ '--frame-width': `calc(${(props.stroke ?? 0) / 12} * var(--canvas-unit))` }} aria-hidden="true" />
 }
 
 function boxStyle(box) {
   return {
-    left: box.x / canvasSize.width * 100 + '%',
-    top: box.y / canvasSize.height * 100 + '%',
-    width: box.width / canvasSize.width * 100 + '%',
-    height: box.height / canvasSize.height * 100 + '%',
+    '--layer-x': box.x / canvasSize.width,
+    '--layer-y': box.y / canvasSize.height,
+    '--layer-width': box.width / canvasSize.width,
+    '--layer-height': box.height / canvasSize.height,
     rotate: (box.rotation ?? 0) + 'deg',
   }
 }
@@ -50,10 +51,10 @@ export function SceneCanvas({ canvas, editor, language, liveWidgets = false, doc
             data-widget-live={liveWidgets && layer.type === 'widget' || undefined}
             style={{
               ...boxStyle(layer), opacity: layer.opacity / 100, color: layer.props.color,
-              '--sticker-size': Math.min(layer.width, layer.height) * 0.78 / 12 + 'cqw',
+              '--sticker-size': `calc(${Math.min(layer.width, layer.height) * 0.78 / 12} * var(--canvas-unit))`,
             }}
             onPointerDown={editor && ((event) => editor.onLayer(event, layer.id))}
-            onContextMenu={editor && ((event) => editor.onMenu(event, layer.id))}>
+            onContextMenu={editor?.onMenu && ((event) => editor.onMenu(event, layer.id))}>
             {artwork(layer, language, liveWidgets)}
             {editor?.widgetsOnly && layer.type === 'widget' && !layer.locked &&
               <span className="canvas-widget-grip" aria-hidden="true"><Move size={14} /></span>}
@@ -64,12 +65,14 @@ export function SceneCanvas({ canvas, editor, language, liveWidgets = false, doc
         {editor?.guides.y !== undefined && <span className="canvas-guide horizontal" aria-hidden="true"
           style={{ top: editor.guides.y / canvasSize.height * 100 + '%' }} />}
         {selection && <div className="canvas-selection" style={boxStyle(selection)}>
-          {!editor.widgetsOnly && <><button type="button" className="canvas-rotate" aria-label={t('rotateHandle', language)}
+          {!editor.widgetsOnly && <button type="button" className="canvas-rotate" aria-label={t('rotateHandle', language)}
             title={t('rotateHandle', language)} onPointerDown={(event) => editor.onHandle(event, 'rotate')}>
             <RotateCw size={12} aria-hidden="true" />
-          </button>
+          </button>}
           <button type="button" className="canvas-resize" aria-label={t('resizeHandle', language)}
-            title={t('resizeHandle', language)} onPointerDown={(event) => editor.onHandle(event, 'resize')} /></>}
+            title={t('resizeHandle', language)} onPointerDown={(event) => editor.onHandle(event, 'resize')}>
+            {editor.widgetsOnly && <MoveDiagonal size={15} aria-hidden="true" />}
+          </button>
         </div>}
       </div>
     </div>
