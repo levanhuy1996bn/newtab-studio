@@ -1,3 +1,4 @@
+import { useThemeDraft } from './useThemeDraft.js'
 import { useEffect, useReducer, useRef, useState } from 'react'
 import {
   AlignCenter, ArrowDown, ArrowUp, Check, Circle, Copy, Diamond, Eye, EyeOff, Frame, Grid2X2,
@@ -140,6 +141,7 @@ function CanvasWorkspace({ theme, current, design, language, error, onApply, onA
 
   const { layers } = history
   const canvas = { layers, widgetLayout: { mode: widgetMode, order: widgetOrder } }
+  const draftStatus = useThemeDraft(theme.id, 'canvas', canvas)
   const widgetLayers = orderedWidgets(canvas)
   const widgets = widgetLayers.filter((layer) => !layer.hidden)
   const flowPreview = preview && widgetMode === 'auto'
@@ -322,7 +324,7 @@ function CanvasWorkspace({ theme, current, design, language, error, onApply, onA
   async function apply() {
     if (busy) return
     setSaving(true)
-    if (await onApply(theme.id, current?.overrides ?? null, { canvas })) onApplied()
+    if (await onApply(theme.id, current?.overrides ?? theme.overrides ?? null, { canvas, draftPart: 'canvas' })) onApplied()
     else setSaving(false)
   }
 
@@ -338,13 +340,13 @@ function CanvasWorkspace({ theme, current, design, language, error, onApply, onA
 
   function downloadLayout() {
     const payload = exportLayout({
-      themeId: theme.id, overrides: current?.overrides, background,
+      themeId: theme.id, presetId: theme.presetId, overrides: current?.overrides ?? theme.overrides, background,
       textLayers: current?.textLayers ?? design.textLayers, canvas, effects: design.effects,
     })
     const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2) + '\n'], { type: 'application/json' }))
     const anchor = document.createElement('a')
     anchor.href = url
-    anchor.download = 'newtab-studio-' + theme.id + '.layout.json'
+    anchor.download = 'newtab-studio-' + theme.id.replace(':', '-') + '.layout.json'
     anchor.click()
     window.setTimeout(() => URL.revokeObjectURL(url), 1000)
   }
@@ -360,6 +362,7 @@ function CanvasWorkspace({ theme, current, design, language, error, onApply, onA
         <button className="primary-button" type="button" disabled={busy} onClick={apply}>
           <Check size={17} aria-hidden="true" /> {t(saving ? 'working' : 'applyCanvas', language)}
         </button>
+        {draftStatus && <p className="studio-muted" role="status">{t(draftStatus, language)}</p>}
         </div>
       </div>
       {error && <p role="alert" className="error-message">{t(error, language)}</p>}
@@ -479,7 +482,7 @@ export function VisualEditor(props) {
   const [failed, setFailed] = useState(false)
   useEffect(() => {
     let alive = true
-    readThemeDesign(theme.id).then((saved) => { if (alive) setDesign(saved) })
+    readThemeDesign(theme.id, 'canvas').then((saved) => { if (alive) setDesign(saved) })
       .catch(() => { if (alive) setFailed(true) })
     return () => { alive = false }
   }, [theme.id])

@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
-import { ArrowRight, Check, ChevronLeft, ChevronRight, Focus, Globe2, Heart, Image, LayoutGrid, Monitor, PanelsTopLeft, Search, SlidersHorizontal, Sparkle, Sparkles, SquarePlus, Type, X } from 'lucide-react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { ArrowRight, Check, ChevronLeft, ChevronRight, Focus, FolderOpen, Globe2, Heart, Image, LayoutGrid, Monitor, PanelsTopLeft, Search, Settings2, SlidersHorizontal, Sparkle, Sparkles, SquarePlus, Type, X } from 'lucide-react'
 import { t, resultCount } from './i18n.js'
 import { connectPreferences, usePreferences } from './preferences.js'
 import { categories, defaultThemeId, filterThemes, galleryCategories, localized, themesById } from './themeCatalog.js'
@@ -14,6 +14,10 @@ import { hasClockWidget } from './widgetModel.js'
 import { EffectsStudio } from './EffectsStudio.jsx'
 import { motionAttributes, useMotionPreference } from './SceneEffects.jsx'
 import { TabWidgetEditor } from './TabWidgetEditor.jsx'
+import { useThemeLibrary } from './useThemeLibrary.js'
+
+const MyThemes = lazy(() => import('./MyThemes.jsx').then((module) => ({ default: module.MyThemes })))
+const StudioSettings = lazy(() => import('./MyThemes.jsx').then((module) => ({ default: module.StudioSettings })))
 
 function Header({ page, setPage, language, setLanguage, ready }) {
   return (
@@ -29,6 +33,12 @@ function Header({ page, setPage, language, setLanguage, ready }) {
           </button>
           <button aria-current={page === 'gallery' ? 'page' : undefined} onClick={() => setPage('gallery')}>
             <LayoutGrid size={16} aria-hidden="true" /> {t('gallery', language)}
+          </button>
+          <button aria-current={page === 'themes' ? 'page' : undefined} onClick={() => setPage('themes')}>
+            <FolderOpen size={16} aria-hidden="true" /> {t('phaseThemes', language)}
+          </button>
+          <button aria-current={page === 'settings' ? 'page' : undefined} onClick={() => setPage('settings')}>
+            <Settings2 size={16} aria-hidden="true" /> {t('phaseSettings', language)}
           </button>
           <button aria-current={page === 'studio' ? 'page' : undefined} onClick={() => setPage('studio')}>
             <Image size={16} aria-hidden="true" /> {t('studio', language)}
@@ -75,7 +85,7 @@ function ThemeCard({ theme, active, favorite, onFavorite, onPreview, language })
 function ThemePreview({ theme, active, language, motion, scheduled, tabSelection, onClose, onApply, onApplied, onEdit, error }) {
   const dialog = useRef(null)
   const name = localized(theme.names, language)
-  const initial = active.themeId === theme.id ? active.overrides : null
+  const initial = active.themeId === theme.id ? active.overrides : theme.overrides
   const [base, setBase] = useState(initial?.base ?? theme.colors[0])
   const [accent, setAccent] = useState(initial?.accent ?? theme.colors[2])
   const [saving, setSaving] = useState(false)
@@ -235,6 +245,7 @@ function TabRail({ language, focusMode, onFocus, showResume, onResume, onCustomi
   const tools = [
     ['studio', Image, 'studio'], ['text', Type, 'textEditor'],
     ['canvas', PanelsTopLeft, 'visualEditor'], ['effects', Sparkles, 'effectTitle'],
+    ['themes', FolderOpen, 'phaseThemes'], ['settings', Settings2, 'phaseSettings'],
   ]
   useEffect(() => {
     function closeOutside(event) {
@@ -337,24 +348,34 @@ function NewTab({ theme, active, language, motion, focusMode, canvas = active.ca
 export function App() {
   const preferences = usePreferences()
   const { ready, language, active, favorites, error, setLanguage, toggleFavorite, applyTheme,
-    focusMode, performanceMode, setFocusMode, tabSelection, schedule, resumeSchedule } = preferences
+    focusMode, performanceMode, setFocusMode, tabSelection, schedule, resumeSchedule, restoreEpoch } = preferences
+  const library = useThemeLibrary()
   const motion = useMotionPreference(performanceMode)
   const [page, setPage] = useState('tab')
   const [preview, setPreview] = useState(null)
   const [editorThemeId, setEditorThemeId] = useState(null)
   const [widgetThemeId, setWidgetThemeId] = useState(null)
   const widgetButton = useRef(null)
-  const activeTheme = themesById.get(active.themeId) ?? themesById.get(defaultThemeId)
-  const editorTheme = themesById.get(editorThemeId) ?? activeTheme
+  const findTheme = (id) => themesById.get(id) ?? library.custom.find((theme) => theme.id === id)
+  const activeTheme = findTheme(active.themeId) ?? themesById.get(defaultThemeId)
+  const editorTheme = findTheme(editorThemeId) ?? activeTheme
   const editorActive = editorTheme.id === active.themeId ? active : null
+  const editorKey = editorTheme.id + ':' + restoreEpoch
 
   useEffect(connectPreferences, [])
   useEffect(() => { document.documentElement.lang = language }, [language])
+  useEffect(() => {
+    if (!restoreEpoch) return
+    setPreview(null)
+    setWidgetThemeId(null)
+    setEditorThemeId(null)
+    setPage((current) => ['studio', 'text', 'canvas', 'effects'].includes(current) ? 'tab' : current)
+  }, [restoreEpoch])
 
   function navigate(next) {
     if (next === page) return
     setWidgetThemeId(null)
-    setEditorThemeId(['studio', 'text', 'canvas', 'effects'].includes(next) ? activeTheme.id : null)
+    setEditorThemeId(['studio', 'text', 'canvas', 'effects'].includes(next) ? editorTheme.id : null)
     setPage(next)
     window.scrollTo(0, 0)
   }
@@ -392,6 +413,7 @@ export function App() {
         : <Header page={page} setPage={navigate} language={language} setLanguage={setLanguage} ready={ready} />}
       {error && !preview && (page === 'tab' || page === 'gallery')
         && <p className="error-banner error-message content-width" role="alert">{t(error, language)}</p>}
+      <Suspense fallback={<main id="main" className="content-width loading" role="status">{t('loading', language)}</main>}>
       {!ready
         ? <main id="main" tabIndex={-1} className="content-width loading" role="status">{t('loading', language)}</main>
         : page === 'tab'
@@ -399,22 +421,26 @@ export function App() {
             ? <TabWidgetEditor key={widgetThemeId} {...{ active, language }} onApply={applyTheme} onClose={closeWidgets}>
               {(canvas, canvasEditor, widgetTools) => <NewTab {...tabProps} {...{ canvas, canvasEditor, widgetTools }} />}
             </TabWidgetEditor>
-            : <NewTab {...tabProps} />
+            : <NewTab key={restoreEpoch} {...tabProps} />
+          : page === 'themes' ? <MyThemes {...{ activeTheme, active, library, language, applyTheme, navigate }}
+            onPreview={setPreview} onEditor={openEditor} />
+          : page === 'settings' ? <StudioSettings preferences={preferences} />
           : page === 'studio'
-            ? <BackgroundStudio key={editorTheme.id} theme={editorTheme}
-              overrides={editorActive?.overrides ?? null} language={language}
+            ? <BackgroundStudio key={editorKey} theme={editorTheme}
+              overrides={editorActive?.overrides ?? editorTheme.overrides ?? null} language={language}
               onApply={applyTheme} onApplied={() => navigate('tab')} error={error} />
             : page === 'text'
-              ? <TextEditor key={editorTheme.id} theme={editorTheme} current={editorActive} language={language}
+              ? <TextEditor key={editorKey} theme={editorTheme} current={editorActive} language={language}
                 onApply={applyTheme} onApplied={() => navigate('tab')} error={error} />
               : page === 'canvas'
-                ? <VisualEditor key={editorTheme.id} theme={editorTheme} current={editorActive} language={language}
+                ? <VisualEditor key={editorKey} theme={editorTheme} current={editorActive} language={language}
                   onApply={applyTheme} onApplied={() => navigate('tab')} error={error} />
                 : page === 'effects'
-                  ? <EffectsStudio key={editorTheme.id} theme={editorTheme} current={editorActive} motion={motion} language={language}
-                    onApply={applyTheme} onApplied={() => navigate('tab')} preferences={preferences} />
+                  ? <EffectsStudio key={editorKey} theme={editorTheme} current={editorActive} motion={motion} language={language}
+                    onApply={applyTheme} onApplied={() => navigate('tab')} preferences={preferences} customThemes={library.custom} />
                   : <Gallery active={active} favorites={favorites} language={language}
                     openPreview={setPreview} toggleFavorite={toggleFavorite} />}
+      </Suspense>
       {preview && <ThemePreview key={preview.id} theme={preview} active={active} language={language} motion={motion}
         scheduled={schedule.mode !== 'off'} tabSelection={tabSelection}
         onClose={() => setPreview(null)} onApply={applyTheme} onApplied={() => navigate('tab')}

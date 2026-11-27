@@ -4,7 +4,7 @@ NewTab Studio là Chrome Extension Manifest V3 thay thế trang New Tab bằng g
 
 ## Trạng thái khi bàn giao
 
-Bản **0.6.8** đã hoàn thành Phase 1–6, tinh chỉnh New Tab đầu Phase 7 và dùng logo Xoài thuôn. Có 33 preset, thanh bên trái gọn, chỉnh widget trực tiếp trên New Tab, Tự sắp xếp phân trang, hai cách đặt ảnh, hiệu ứng và lịch đổi theme. Phase 7 tiếp tục với quản lý theme, backup/restore và phát hành. Xem [HANDOVER.md](HANDOVER.md), [PROGRESS.md](PROGRESS.md) và [CHANGELOG.md](CHANGELOG.md).
+Bản **1.1.4** hoàn thành các tính năng Phase 7, gồm My Themes, workspace, bản nháp và sao lưu/khôi phục. Thư viện có 51 preset, gồm các nhóm Conan và Doraemon. Có thể chỉnh widget trực tiếp trên New Tab, dùng Tự sắp xếp phân trang, hai cách đặt ảnh, hiệu ứng và lịch đổi theme. Tài nguyên phát hành bản 1.1.4 đã chuẩn bị. Xem [HANDOVER.md](HANDOVER.md), [PROGRESS.md](PROGRESS.md) và [CHANGELOG.md](CHANGELOG.md).
 
 ## Điểm vào mã nguồn
 

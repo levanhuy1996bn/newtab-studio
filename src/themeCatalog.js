@@ -1,9 +1,13 @@
 import { readBackground } from './background.js'
 import { animeWallpapers } from './animeWallpapers.js'
+import { spaceWallpapers } from './spaceWallpapers.js'
 
 export const categories = {
-  nature: ['Nature', 'Thiên nhiên'],
   anime: ['Anime', 'Anime'],
+  conan: ['Conan', 'Conan'],
+  doraemon: ['Doraemon', 'Doraemon'],
+  landscape: ['Landscape', 'Phong cảnh'],
+  nature: ['Nature', 'Thiên nhiên'],
   nostalgia: ['Nostalgia', 'Hoài niệm'],
   sky: ['Sky', 'Bầu trời'],
   minimal: ['Minimal', 'Tối giản'],
@@ -42,6 +46,7 @@ const groups = {
     ['blue-marble', 'Blue Marble', 'Trái Đất xanh', 'orbit', '171e2d 425977 9fd4d3'],
     ['martian-dunes', 'Martian Dunes', 'Cồn cát sao Hỏa', 'dunes', '383136 7f695b c5a283'],
     ['cosmic-cliffs', 'Cosmic Cliffs', 'Vách đá vũ trụ', 'peaks', '192638 576879 e4a465'],
+    ...spaceWallpapers.map(([id, en, vi, colors]) => [id, en, vi, 'orbit', colors]),
   ],
   minimal: [
     ['quiet-linen', 'Quiet Linen', 'Vải lanh tĩnh lặng', 'paper', 'c5b69f e8ddc4 605847'],
@@ -78,23 +83,25 @@ const groups = {
 }
 
 const photoPresets = {
-  ...Object.fromEntries(animeWallpapers.map(([id, , , , positionX, tags]) => [id, [id, positionX, tags]])),
-  'forest-hour': ['forest-road', 79],
-  'alpine-air': ['summit-view', 85],
-  'cedar-path': ['cedar-path', 75, ['nature']],
-  'summit-of-clouds': ['summit-of-clouds', 84, ['nature', 'sky']],
-  'coastal-train': ['coastal-train', 89, ['nature']],
-  'lanterns-after-rain': ['lanterns-after-rain', 71, ['nostalgia']],
-  'village-after-rain': ['village-after-rain', 51, ['anime']],
-  'evening-ferry': ['evening-ferry', 82],
+  ...Object.fromEntries([...animeWallpapers, ...spaceWallpapers].map(([id, , , , positionX, tags]) =>
+    [id, [id, positionX, tags]])),
+  'forest-hour': ['forest-road', 79, ['landscape']],
+  'alpine-air': ['summit-view', 85, ['landscape']],
+  'cedar-path': ['cedar-path', 75, ['nature', 'landscape']],
+  'summit-of-clouds': ['summit-of-clouds', 84, ['nature', 'sky', 'landscape']],
+  'coastal-train': ['coastal-train', 89, ['nature', 'landscape']],
+  'lanterns-after-rain': ['lanterns-after-rain', 71, ['nostalgia', 'landscape']],
+  'village-after-rain': ['village-after-rain', 51, ['anime', 'landscape']],
+  'evening-ferry': ['evening-ferry', 82, ['landscape']],
   'blue-marble': ['blue-marble', 50],
-  'martian-dunes': ['mars-dunes', 50],
+  'martian-dunes': ['mars-dunes', 50, ['landscape']],
   'cosmic-cliffs': ['cosmic-cliffs', 55],
 }
 
 // Keep retired IDs readable for themes and schedules saved by earlier versions.
 const retiredIds = new Set([
   'lavender-dusk', 'peach-sunrise', 'blue-meridian', 'after-the-rain', 'high-clouds', 'summer-eclipse',
+  'blue-marble', 'martian-dunes', 'cosmic-cliffs',
   'quiet-linen', 'ink-and-paper', 'soft-sage', 'ceramic', 'blueprint', 'daylight',
   'soda-shop', 'golden-vinyl', 'desert-motel',
   'color-current', 'glass-garden', 'spectrum', 'soft-orbit', 'folded-light', 'isobar',
@@ -114,6 +121,8 @@ const catalog = Object.entries(groups).flatMap(([category, records]) =>
   }),
 ).sort((a, b) => Number(Boolean(b.wallpaper)) - Number(Boolean(a.wallpaper)))
 export const themesById = new Map(catalog.map((theme) => [theme.id, theme]))
+export const isCustomThemeId = (id) => typeof id === 'string' && /^theme:[\w-]{1,64}$/.test(id)
+export const isThemeId = (id) => themesById.has(id) || isCustomThemeId(id)
 export const themes = catalog.filter((theme) => !retiredIds.has(theme.id))
 export const galleryCategories = Object.entries(categories).filter(([id]) =>
   themes.some(({ category, tags }) => category === id || tags.includes(id)))

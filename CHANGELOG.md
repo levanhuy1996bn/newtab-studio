@@ -4,6 +4,11 @@ Các mốc dưới đây là bản build cục bộ. Kết quả kiểm thử ch
 
 | Phiên bản | Thay đổi |
 | --- | --- |
+| 1.1.4 | Thêm năm wallpaper vẽ lại từ ảnh Doraemon người dùng gửi và bộ lọc Doraemon. Thư viện có 51 hình nền. |
+| 1.1.3 | Thay ba preset ảnh vũ trụ bằng ba wallpaper ImageGen, thêm bộ lọc Conan với bốn ảnh và giữ tương thích với các preset cũ đã lưu. Thư viện có 46 hình nền. |
+| 1.1.2 | Thêm 13 wallpaper anime và nhóm Phong cảnh. Thư viện có 46 hình nền, với các nhóm có thể giao nhau. |
+| 1.1.1 | Đổi kích thước widget trên New Tab, thêm bốn mặt đồng hồ kim, chỉnh phông widget và bổ sung 20 đoạn Kinh Thánh song ngữ. |
+| 1.1.0 | Thêm My Themes, workspace, bản nháp tự lưu, xuất theme kèm ảnh, nhập bản sao và khôi phục dữ liệu đầy đủ. |
 | 1.0.0 | Dùng tên New Tab with Wallpapers & Widgets và cập nhật mô tả EN/VI cho gói cùng Chrome Web Store. |
 | 0.6.8 | Liên kết nhanh hiển thị thành ô lối tắt. Thêm, sửa và gỡ trên New Tab hoặc hiện các trang hay mở và vừa mở bằng quyền lịch sử Chrome tùy chọn. |
 | 0.6.7 | Gắn nhãn Thiên nhiên và Bầu trời cho wallpaper theo nội dung, đồng thời giữ nhóm Anime theo phong cách. |

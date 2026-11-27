@@ -1,4 +1,5 @@
 import { animeWallpapers } from './animeWallpapers.js'
+import { spaceWallpapers } from './spaceWallpapers.js'
 
 export const imageTypes = ['image/jpeg', 'image/png', 'image/webp']
 export const maxImageBytes = 15 * 1024 * 1024
@@ -29,7 +30,7 @@ export const bundledPictures = [
   { id: 'bundled:village-after-rain', names: ['Village After Rain', 'Ngõ làng sau mưa'], file: 'village-after-rain.webp', credit: 'NewTab Studio · ImageGen' },
   { id: 'bundled:evening-ferry', names: ['Evening Ferry', 'Bến đò chiều muộn'], file: 'evening-ferry.webp', credit: 'NewTab Studio · ImageGen' },
   { id: 'bundled:lanterns-after-rain', names: ['Lanterns After Rain', 'Đèn làng sau mưa'], file: 'lanterns-after-rain.webp', credit: 'NewTab Studio · ImageGen' },
-  ...animeWallpapers.map(([id, en, vi]) => ({
+  ...[...animeWallpapers, ...spaceWallpapers].map(([id, en, vi]) => ({
     id: 'bundled:' + id, names: [en, vi], file: id + '.webp', credit: 'NewTab Studio · ImageGen',
   })),
 ]

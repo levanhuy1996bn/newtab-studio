@@ -1,3 +1,5 @@
+import { scriptureQuotes } from './scriptureQuotes.js'
+
 export const maxTextLayers = 8
 export const maxTextLength = 1200
 
@@ -48,10 +50,11 @@ const entries = [
   ['choose-one', 'quote', 'Choose one thing', 'Chọn một việc', 'Choose one thing you can finish, then give it a start.', 'Chọn một việc bạn có thể hoàn thành, rồi bắt đầu làm.'],
 ]
 
-export const textEntries = entries.map(([id, kind, en, vi, enText, viText]) => ({
+const originalEntries = entries.map(([id, kind, en, vi, enText, viText]) => ({
   id, kind, titles: [en, vi], texts: [enText, viText],
   author: 'NewTab Studio', source: 'original',
 }))
+export const textEntries = [...originalEntries, ...scriptureQuotes]
 const entriesById = new Map(textEntries.map((entry) => [entry.id, entry]))
 const quotes = textEntries.filter((entry) => entry.kind === 'quote')
 

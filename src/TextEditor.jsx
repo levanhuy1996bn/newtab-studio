@@ -1,3 +1,4 @@
+import { useThemeDraft } from './useThemeDraft.js'
 import { useEffect, useRef, useState } from 'react'
 import { CalendarDays, Check, Plus, Shuffle, Trash2, Type } from 'lucide-react'
 import { t } from './i18n.js'
@@ -112,13 +113,14 @@ export function TextEditor({ theme, current, language, error, onApply, onApplied
   const [failed, setFailed] = useState(false)
   const [saving, setSaving] = useState(false)
   const contentRef = useRef(null)
+  const draftStatus = useThemeDraft(theme.id, 'textLayers', design?.textLayers)
   const layers = design?.textLayers ?? []
   const selected = layers.find((layer) => layer.id === selectedId)
   const full = layers.length >= maxTextLayers
 
   useEffect(() => {
     let alive = true
-    readThemeDesign(theme.id).then((saved) => {
+    readThemeDesign(theme.id, 'textLayers').then((saved) => {
       if (alive) {
         setDesign(saved)
         setSelectedId(saved.textLayers[0]?.id ?? null)
@@ -153,7 +155,7 @@ export function TextEditor({ theme, current, language, error, onApply, onApplied
 
   async function apply() {
     setSaving(true)
-    if (await onApply(theme.id, current?.overrides ?? null, { textLayers: layers })) onApplied()
+    if (await onApply(theme.id, current?.overrides ?? theme.overrides ?? null, { textLayers: layers, draftPart: 'textLayers' })) onApplied()
     else setSaving(false)
   }
 
@@ -168,6 +170,7 @@ export function TextEditor({ theme, current, language, error, onApply, onApplied
         <button className="primary-button" type="button" disabled={!design || saving} onClick={apply}>
           <Check size={17} aria-hidden="true" /> {t(saving ? 'working' : 'applyText', language)}
         </button>
+        {draftStatus && <p className="studio-muted" role="status">{t(draftStatus, language)}</p>}
       </div>
       {failed && <p role="alert" className="error-message">{t('readError', language)}</p>}
       {!failed && !design && <p role="status" className="studio-muted">{t('textLoading', language)}</p>}

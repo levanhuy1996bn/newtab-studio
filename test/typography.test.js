@@ -54,3 +54,16 @@ test('random quote excludes the previous choice when possible', () => {
   assert.equal(previous.kind, 'quote')
   assert.notEqual(randomQuote(previous.id, () => 0).id, previous.id)
 })
+
+test('a 28-day quote cycle includes all 20 Scripture entries once with both languages', () => {
+  const rotation = Array.from({ length: 28 }, (_, day) => dailyQuote(day))
+  assert.equal(new Set(rotation.map((entry) => entry.id)).size, 28)
+  assert.equal(rotation.filter((entry) => entry.source === 'scripture').length, 20)
+  for (const entry of rotation) {
+    assert.ok(entry.texts.every(Boolean))
+    if (entry.source === 'scripture') assert.ok(entry.references.every(Boolean))
+  }
+  const passage = rotation.find((entry) => entry.id === 'scripture-see-the-father')
+  assert.equal(passage.texts[1], 'Ai thấy Thầy là thấy Chúa Cha.')
+  assert.equal(dailyQuote(28), rotation[0])
+})

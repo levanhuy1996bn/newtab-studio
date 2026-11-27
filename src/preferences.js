@@ -1,7 +1,9 @@
 import { create } from 'zustand'
 import { defaultThemeId, themesById } from './themeCatalog.js'
-import { readActiveSelection, saveActiveSelection, StudioError, watchStudio } from './studioRepository.js'
+import { backupSnapshot, clearPendingPreferences, installStudioData, readActiveSelection, readPendingPreferences,
+  saveActiveSelection, StudioError, watchStudio } from './studioRepository.js'
 import { readSchedule, scheduledThemeId } from './effects.js'
+import { isThemeId, readPalette } from './studioData.js'
 
 const languageKey = 'nts.language'
 const activeKey = 'nts.activeTheme'
@@ -10,18 +12,16 @@ const focusKey = 'nts.focusMode'
 const performanceKey = 'nts.performanceMode'
 const tabSelectionKey = 'nts.tabSelection'
 const favoritePrefix = 'nts.favorite.'
-const colorPattern = /^#[0-9a-f]{6}$/i
+const introKey = 'nts.introSeen'
 
 export function readActiveTheme(value) {
-  if (value?.version !== 1 || !themesById.has(value.themeId)) {
+  if (value?.version !== 1 || !isThemeId(value.themeId)) {
     return { version: 1, themeId: defaultThemeId, overrides: null }
   }
-  const { base, accent } = value.overrides ?? {}
-  const valid = [base, accent].every((color) => typeof color === 'string' && colorPattern.test(color))
   return {
     version: 1,
     themeId: value.themeId,
-    overrides: valid ? { base: base.toLowerCase(), accent: accent.toLowerCase() } : null,
+    overrides: readPalette(value.overrides),
   }
 }
 
@@ -36,7 +36,7 @@ function parseLocal(value) {
 function readTabSelection() {
   try {
     const saved = parseLocal(globalThis.sessionStorage?.getItem(tabSelectionKey))
-    if (themesById.has(saved?.themeId)) return { ...readActiveTheme(saved), useBackground: saved.useBackground === true }
+    if (isThemeId(saved?.themeId)) return { ...readActiveTheme(saved), useBackground: saved.useBackground === true }
   } catch {
     // The in-memory choice still works when session storage is unavailable.
   }
@@ -58,6 +58,7 @@ function createStorage() {
     return {
       read: () => extension.local.get(null),
       write: (key, value) => extension.local.set({ [key]: value }),
+      writeMany: (values) => extension.local.set(values),
       watch(callback) {
         const listener = (changes, area) => {
           if (area === 'local') {
@@ -80,12 +81,16 @@ function createStorage() {
       globalThis.localStorage.setItem(key, JSON.stringify(value))
       notify?.({ [key]: value })
     },
+    async writeMany(values) {
+      for (const [key, value] of Object.entries(values)) globalThis.localStorage.setItem(key, JSON.stringify(value))
+      notify?.(values)
+    },
     watch(callback) {
       notify = callback
       const listener = ({ key, newValue, storageArea }) => {
         if (storageArea === globalThis.localStorage) {
           callback(key === null
-            ? Object.fromEntries([languageKey, activeKey, scheduleKey, focusKey, performanceKey,
+            ? Object.fromEntries([languageKey, activeKey, scheduleKey, focusKey, performanceKey, introKey,
               ...Array.from(themesById.keys(), (id) => favoritePrefix + id)]
               .map((name) => [name, undefined]))
             : { [key]: parseLocal(newValue) })
@@ -102,6 +107,55 @@ function createStorage() {
 
 const browserLanguage = globalThis.navigator?.language?.split('-')[0] === 'vi' ? 'vi' : 'en'
 const storage = createStorage()
+const preferenceLock = (operation) => globalThis.navigator?.locks
+  ? navigator.locks.request('newtab-studio-preferences', operation) : operation()
+
+export function portablePreferences(values) {
+  return {
+    [languageKey]: values?.[languageKey] === 'vi' || values?.[languageKey] === 'en' ? values[languageKey] : null,
+    [activeKey]: values?.[activeKey] ? readActiveTheme(values[activeKey]) : null,
+    [scheduleKey]: readSchedule(values?.[scheduleKey]),
+    [focusKey]: values?.[focusKey] === true,
+    [performanceKey]: values?.[performanceKey] === true,
+    [introKey]: values?.[introKey] === true,
+    ...Object.fromEntries([...themesById.keys()].map((id) => [favoritePrefix + id, values?.[favoritePrefix + id] === true])),
+  }
+}
+
+async function restoredPreferences() {
+  const pending = await readPendingPreferences()
+  if (!pending) return null
+  try {
+    await storage.writeMany(pending.values)
+    await clearPendingPreferences()
+  } catch {
+    return pending
+  }
+  return { ...pending, persisted: true }
+}
+
+export function exportStudioSnapshot() {
+  return preferenceLock(async () => {
+    const pending = await restoredPreferences()
+    return { ...await backupSnapshot(), preferences: portablePreferences(pending?.values ?? await storage.read()) }
+  })
+}
+
+export function restoreStudioData(data, mode, copyName) {
+  return preferenceLock(async () => {
+    await installStudioData(data, mode, copyName)
+    if (mode !== 'replace') return null
+    return restoredPreferences()
+  })
+}
+
+function writePreference(key, value) {
+  return preferenceLock(async () => {
+    const pending = await restoredPreferences()
+    if (pending && !pending.persisted) throw new StudioError('saveError')
+    await storage.write(key, value)
+  })
+}
 
 function mergePreferences(values, state) {
   const updates = {}
@@ -113,6 +167,7 @@ function mergePreferences(values, state) {
   if (Object.hasOwn(values, scheduleKey)) updates.schedule = readSchedule(values[scheduleKey])
   if (Object.hasOwn(values, focusKey)) updates.focusMode = values[focusKey] === true
   if (Object.hasOwn(values, performanceKey)) updates.performanceMode = values[performanceKey] === true
+  if (Object.hasOwn(values, introKey)) updates.introSeen = values[introKey] === true
   const favorites = new Set(state.favorites)
   for (const [key, value] of Object.entries(values)) {
     if (!key.startsWith(favoritePrefix)) continue
@@ -151,13 +206,16 @@ export const usePreferences = create((set, get) => {
     tabSelection: readTabSelection(),
     focusMode: false,
     performanceMode: false,
+    introSeen: false,
+    restoreEpoch: 0,
     favorites: new Set(),
     error: null,
-    setLanguage: (language) => write(languageKey, () => storage.write(languageKey, language)),
-    toggleFavorite: (id) => write(favoritePrefix + id, () => storage.write(favoritePrefix + id, !get().favorites.has(id))),
-    setSchedule: (schedule) => write(scheduleKey, () => storage.write(scheduleKey, readSchedule(schedule))),
-    setFocusMode: (value) => write(focusKey, () => storage.write(focusKey, value)),
-    setPerformanceMode: (value) => write(performanceKey, () => storage.write(performanceKey, value)),
+    setLanguage: (language) => write(languageKey, () => writePreference(languageKey, language)),
+    toggleFavorite: (id) => write(favoritePrefix + id, () => writePreference(favoritePrefix + id, !get().favorites.has(id))),
+    setSchedule: (schedule) => write(scheduleKey, () => writePreference(scheduleKey, readSchedule(schedule))),
+    setFocusMode: (value) => write(focusKey, () => writePreference(focusKey, value)),
+    setPerformanceMode: (value) => write(performanceKey, () => writePreference(performanceKey, value)),
+    dismissIntro: () => write(introKey, () => writePreference(introKey, true)),
     resumeSchedule() {
       rememberTabSelection(null)
       set({ tabSelection: null })
@@ -201,13 +259,14 @@ export function connectPreferences() {
     const read = ++selectionRead
     const { schedule, tabSelection } = usePreferences.getState()
     lastScheduledId = scheduledThemeId(schedule)
-    const requested = lastScheduledId && (tabSelection ?? { version: 1, themeId: lastScheduledId, overrides: null, useBackground: true })
+    const requested = lastScheduledId && (tabSelection ?? { version: 1, themeId: lastScheduledId, useBackground: true })
     try {
       const baseline = await readActiveSelection()
       const next = requested && (tabSelection || baseline?.themeId !== requested.themeId)
         ? await readActiveSelection(requested) : baseline
       if (!cancelled && read === selectionRead) {
-        usePreferences.setState({ active: next ? { ...next, ...readActiveTheme(next) } : legacyActive })
+        const effective = next ?? baseline
+        usePreferences.setState({ active: effective ? { ...effective, ...readActiveTheme(effective) } : legacyActive })
       }
     } catch {
       if (!cancelled && read === selectionRead) {
@@ -232,6 +291,14 @@ export function connectPreferences() {
   })
   const unwatchStudio = watchStudio((kind) => {
     if (kind === 'selection') void refreshSelection()
+    if (kind === 'restore') {
+      rememberTabSelection(null)
+      usePreferences.setState((state) => ({ tabSelection: null, restoreEpoch: state.restoreEpoch + 1 }))
+      void preferenceLock(restoredPreferences).then(async (pending) => {
+        if (!cancelled) applyPreferences(pending?.values ?? await storage.read())
+        if (!cancelled) await refreshSelection()
+      }).catch(() => { if (!cancelled) usePreferences.setState({ error: 'readError' }) })
+    }
   })
   const unsubscribeSchedule = usePreferences.subscribe((current, previous) => {
     if (!hydrationChanges && (current.schedule !== previous.schedule || current.tabSelection !== previous.tabSelection)) {
@@ -245,7 +312,7 @@ export function connectPreferences() {
   }
   document.addEventListener('visibilitychange', refreshWhenVisible)
 
-  storage.read().then((values) => {
+  preferenceLock(async () => (await restoredPreferences())?.values ?? storage.read()).then((values) => {
     if (!cancelled) applyPreferences({ ...values, ...hydrationChanges })
   }).catch(() => {
     if (!cancelled) usePreferences.setState({ error: 'readError' })

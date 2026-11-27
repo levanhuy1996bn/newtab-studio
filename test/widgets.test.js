@@ -91,3 +91,14 @@ test('automatic order exports independently of saved layer geometry and defaults
   assert.deepEqual(free.widgetLayout.order, auto.widgetLayout.order)
   assert.deepEqual(exportLayout({ themeId: 'forest-hour', canvas: auto }).canvas, auto)
 })
+
+test('analog face and markings normalize older designs and survive export', () => {
+  const legacy = readWidget('analog', { seconds: false })
+  assert.equal(legacy.face, 'ivory')
+  assert.equal(legacy.markings, 'numbers')
+  assert.equal(legacy.seconds, false)
+  const layer = makeLayer('widget', 0, { kind: 'analog', config: { face: 'copper', markings: 'dots', seconds: false } })
+  const exported = exportLayout({ themeId: 'forest-hour', canvas: { layers: [layer] } })
+  assert.deepEqual(exported.canvas.layers[0].props.config, { title: '', face: 'copper', markings: 'dots', seconds: false })
+  assert.deepEqual(readWidget('analog', { face: 'unknown', markings: '__proto__' }), readWidget('analog'))
+})

@@ -1,8 +1,10 @@
 const heading = { title: '' }
+export const analogFaces = ['ivory', 'midnight', 'sage', 'copper']
+export const analogMarkings = ['numbers', 'ticks', 'dots']
 
 export const widgetRegistry = {
   digital: { size: [320, 142], defaults: { ...heading, hourCycle: '24', seconds: false } },
-  analog: { size: [210, 210], defaults: { ...heading, seconds: true } },
+  analog: { size: [210, 210], defaults: { ...heading, seconds: true, face: 'ivory', markings: 'numbers' } },
   greeting: { size: [360, 156], defaults: { ...heading, name: '' } },
   search: { size: [460, 114], defaults: { ...heading, engine: 'google' } },
   links: { size: [330, 160], defaults: { ...heading, links: [] } },
@@ -76,6 +78,10 @@ export function readWidget(kind, input) {
   const config = { ...defaults, title }
   if (kind === 'digital') config.hourCycle = value.hourCycle === '12' ? '12' : '24'
   if (kind === 'digital' || kind === 'analog') config.seconds = typeof value.seconds === 'boolean' ? value.seconds : defaults.seconds
+  if (kind === 'analog') {
+    config.face = analogFaces.includes(value.face) ? value.face : defaults.face
+    config.markings = analogMarkings.includes(value.markings) ? value.markings : defaults.markings
+  }
   if (kind === 'greeting') config.name = trim(value.name, 36)
   if (kind === 'search' && Object.hasOwn(searchEngines, value.engine)) config.engine = value.engine
   if (kind === 'links' && Array.isArray(value.links)) {

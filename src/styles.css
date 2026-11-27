@@ -508,6 +508,21 @@ button:disabled { cursor: default; }
   font-display: swap;
 }
 
+@font-face {
+  font-family: "NTS Be Vietnam Pro";
+  src: url("/fonts/be-vietnam-pro-regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "NTS Be Vietnam Pro";
+  src: url("/fonts/be-vietnam-pro-semibold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
 .scene { container-type: inline-size; }
 .scene-text-stack {
   display: grid;
@@ -697,27 +712,33 @@ button:disabled { cursor: default; }
 .canvas-overlay[data-editing='true'] .widget-card { pointer-events: none; }
 
 .widget-card {
-  display: flex; flex-direction: column; gap: 5px; width: 100%; height: 100%; min-width: 0;
+  display: flex; flex-direction: column; gap: 7px; width: 100%; height: 100%; min-width: 0;
   overflow: hidden; padding: clamp(5px, 1.1cqw, 17px); border: 1px solid #ffffff26; border-radius: clamp(5px, 1cqw, 15px);
-  color: var(--widget-color); background: #1b332be8; font-size: clamp(8px, 1.5cqw, 16px); line-height: 1.24;
+  color: var(--widget-color); background: #1b332be8; font-size: clamp(8px, 1.5cqw, 16px); line-height: 1.4;
   overflow-wrap: anywhere;
 }
+.widget-card, .shortcut-dialog { font-family: "NTS Be Vietnam Pro", "NTS Noto Sans", system-ui, sans-serif; }
 .widget-card[data-live='true'] { overflow: auto; overscroll-behavior: contain; }
 .widget-card[data-surface='paper'] { background: #fbf7e9; border-color: #796d5840; }
 .widget-card[data-surface='clear'] { background: transparent; border-color: transparent; text-shadow: 0 1px 5px #111a16b0; }
-.widget-card h3 { margin: 0; font-size: .78em; line-height: 1.2; font-weight: 700; opacity: .86; }
+.widget-card h3 { margin: 0; font-size: .86em; line-height: 1.2; font-weight: 600; letter-spacing: .015em; opacity: .86; }
 .widget-card button { min-width: 0; padding: 3px 6px; border-radius: 5px; border: 1px solid currentColor; text-shadow: none; }
 .widget-card button:not(:disabled):hover { background: #8d9b8840; }
 .widget-card button:disabled { opacity: .6; }
 .widget-card :focus-visible { outline-color: #ddb65c; outline-offset: 1px; }
 .widget-card :is(input:not([type='checkbox']), textarea) {
-  min-width: 0; width: 100%; padding: 4px 6px; border: 1px solid #7d8a7770; border-radius: 5px;
+  min-width: 0; width: 100%; padding: .38em .6em; border: 1px solid #7d8a7770; border-radius: 7px;
   background: #fffdf2; color: #202a25; font: inherit; text-shadow: none;
 }
 .widget-card ::placeholder { color: #59665e; }
 .widget-card [type='checkbox'] { flex: 0 0 auto; accent-color: #9fc4a5; }
 .widget-card svg { flex-shrink: 0; }
-.widget-card blockquote { font-family: var(--serif); margin: 0; font-size: 1.16em; }
+.widget-card blockquote { font-family: "NTS Lora", var(--serif); margin: 0; font-size: 1.22em; line-height: 1.42; }
+.widget-quote-body {
+  min-height: 0; overflow: auto; padding: 2px; scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, currentColor 44%, transparent) transparent;
+}
+.widget-quote-body cite { display: block; margin-bottom: .35em; font-size: .8em; font-weight: 600; font-style: normal; }
 .widget-time { font-family: var(--serif); font-size: 2.5em; font-variant-numeric: tabular-nums; line-height: 1; }
 .widget-greeting { font-family: var(--serif); font-size: 1.45em; line-height: 1.12; }
 .widget-muted { opacity: .78; }
@@ -725,21 +746,57 @@ button:disabled { cursor: default; }
 .widget-form { display: flex; min-width: 0; gap: 4px; align-items: stretch; }
 .widget-form button, .widget-tasks button { display: grid; place-items: center; flex-shrink: 0; }
 .widget-tasks, .widget-notes { display: grid; gap: 4px; min-width: 0; }
-.widget-tasks li { display: flex; justify-content: space-between; align-items: center; gap: 5px; }
-.widget-tasks label { display: flex; min-width: 0; align-items: center; gap: 5px; }
+.widget-tasks { gap: 6px; }
+.widget-tasks li { display: flex; justify-content: space-between; align-items: center; gap: 5px; padding-block: 2px; }
+.widget-tasks label { display: flex; min-width: 0; align-items: center; gap: 7px; }
 .widget-tasks label:has(:checked) span { text-decoration: line-through; opacity: .8; }
-.widget-notes textarea { resize: vertical; }
+.widget-notes textarea { resize: vertical; line-height: 1.5; }
 .widget-notes button { justify-self: end; }
 
-.widget-analog { position: relative; align-self: center; width: min(100%, 8em); aspect-ratio: 1; border: 1px solid currentColor; border-radius: 50%; flex-shrink: 0; }
-.widget-analog span { position: absolute; font-size: .84em; }
-.analog-n12 { top: 3%; left: 50%; transform: translateX(-50%); }
-.analog-n6 { bottom: 3%; left: 50%; transform: translateX(-50%); }
-.analog-n9 { top: 50%; left: 5%; transform: translateY(-50%); }
-.analog-n3 { top: 50%; right: 5%; transform: translateY(-50%); }
-.analog-hand { position: absolute; width: 2px; height: 34%; left: calc(50% - 1px); bottom: 50%; transform-origin: bottom center; border-radius: 2px; background: currentColor; }
-.analog-hour { width: 3px; height: 23%; }
-.analog-second { width: 1px; height: 38%; background: #e08367; }
+.widget-analog {
+  display: grid; flex: 1 1 0; min-height: 0; place-items: center;
+  min-width: 0; overflow: hidden; container-type: size; align-self: stretch;
+}
+:is(.widget-flow, .widget-dock) .widget-analog { min-height: 100px; }
+.analog-dial {
+  position: relative; display: block; isolation: isolate; container-type: inline-size;
+  width: min(100cqw, 100cqh); aspect-ratio: 1; max-width: 100%; border-radius: 50%;
+  color: var(--dial-ink); background: radial-gradient(circle at 35% 23%, var(--dial-light), var(--dial-base) 68%);
+  border: 2px solid var(--dial-rim); box-shadow: inset 0 0 0 1px #ffffff45, 0 3px 9px #08131048;
+  text-shadow: none;
+  --dial-light: #fffdf6; --dial-base: #e9e0cc; --dial-ink: #343f38; --dial-rim: #a69472; --dial-accent: #994232;
+}
+.analog-dial[data-face='midnight'] {
+  --dial-light: #233949; --dial-base: #121e2b; --dial-ink: #f3eee0; --dial-rim: #718c9f; --dial-accent: #f7b875;
+}
+.analog-dial[data-face='sage'] {
+  --dial-light: #dce9d5; --dial-base: #acc4ae; --dial-ink: #243e33; --dial-rim: #657d68; --dial-accent: #9b432e;
+}
+.analog-dial[data-face='copper'] {
+  --dial-light: #97553d; --dial-base: #532f28; --dial-ink: #fff0d9; --dial-rim: #b98464; --dial-accent: #ffd08b;
+}
+.analog-index { position: absolute; inset: 0; }
+.analog-index::after {
+  content: ''; position: absolute; top: 5%; left: 50%; width: 1%; height: 3%; translate: -50%;
+  border-radius: 4px; background: currentColor; opacity: .56;
+}
+.analog-index[data-major='true']::after { width: 1.8%; height: 6%; opacity: 1; }
+[data-markings='dots'] .analog-index::after { width: 4%; height: 4%; top: 9%; border-radius: 50%; }
+.analog-number {
+  position: absolute; translate: -50% -50%; font-size: 9cqw;
+  font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1;
+}
+.analog-hand {
+  position: absolute; left: 50%; bottom: 50%; height: 36%; width: 3%;
+  translate: -50%; rotate: var(--hand-angle); transform-origin: bottom center;
+  border-radius: 1.5cqw; background: currentColor;
+}
+.analog-hour { height: 25%; width: 5%; }
+.analog-second { height: 40%; width: 1.6%; background: var(--dial-accent); }
+.analog-pivot {
+  position: absolute; top: 50%; left: 50%; width: 6%; height: 6%; translate: -50% -50%;
+  border-radius: 50%; background: var(--dial-accent); border: 1px solid var(--dial-light);
+}
 .widget-calendar-head { display: flex; justify-content: space-between; align-items: center; gap: 4px; text-align: center; }
 .widget-calendar { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px; text-align: center; font-variant-numeric: tabular-nums; font-size: .87em; }
 .widget-calendar span { padding: 2px 0; }
@@ -879,6 +936,7 @@ button:disabled { cursor: default; }
 .tab-widget-flow > div { display: flex; max-width: none; min-height: 68px; max-height: clamp(156px, 28dvh, 184px); }
 .tab-widget-flow > div[hidden] { display: none; }
 .tab-widget-flow .widget-card { overflow: auto; height: auto; padding: 9px; scrollbar-width: thin; scrollbar-color: #fffdf46e transparent; }
+.widget-card[data-widget-kind='analog'] { overflow: hidden; }
 .tab-widget-flow .widget-notes textarea { min-height: 46px; }
 .tab-widget-flow .widget-tasks { gap: 3px; }
 .tab-widget-flow .widget-calendar span { padding: 0 1px; }
@@ -971,7 +1029,8 @@ button:disabled { cursor: default; }
   color: #fff; font-weight: 750; font-size: 1.1em;
 }
 .shortcut-mark.shortcut-add { background: #6f878638; color: inherit; }
-.shortcut-label { display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .82em; }
+.shortcut-label { display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .82em; font-weight: 600; }
+.shortcut-add + .shortcut-label { white-space: normal; text-align: center; }
 .widget-card .shortcut-settings {
   display: grid; place-items: center; flex: none; min-width: 25px; min-height: 25px; padding: 3px;
   border: 1px solid #a6b9b566; border-radius: 7px;
@@ -999,3 +1058,31 @@ button:disabled { cursor: default; }
 .shortcut-manage { margin: 8px 0; font-size: 14px; }
 .shortcut-manage li { display: flex; align-items: center; gap: 6px; padding: 2px 0; border-top: 1px solid #d6ddd2; }
 .shortcut-manage span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+
+.phase-studio { padding-bottom: 40px; }
+.phase-panel { display: grid; align-content: start; gap: 12px; }
+.phase-studio > .phase-panel { margin-bottom: 16px; }
+.phase-studio .studio-heading { align-items: center; flex-wrap: wrap; gap: 12px; }
+.phase-actions { display: flex; flex-wrap: wrap; align-items: end; gap: 8px; }
+.phase-actions .text-field { min-width: min(220px, 100%); }
+.phase-edit-form { display: grid; gap: 10px; max-width: 420px; }
+.phase-theme-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 365px), 1fr)); gap: 14px; }
+.phase-panel p, .phase-theme-list h2 { overflow-wrap: anywhere; }
+.phase-theme-preview { height: 116px; border-radius: 9px; }
+.phase-editor-select select { padding: 8px; border: 1px solid var(--border); border-radius: 9px; background: white; }
+.phase-import-preview {
+  display: grid; gap: 10px; min-width: 0; padding: 12px; border-radius: 10px; background: #eef4ed;
+}
+.phase-import-preview > strong { overflow-wrap: anywhere; }
+.phase-import-preview ul { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 14px; }
+.phase-guide { display: grid; gap: 5px; padding-inline-start: 24px; list-style: decimal; }
+.phase-panel > :is(button, .text-field) { justify-self: start; }
+
+
+.analog-option { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; }
+.analog-option select { max-width: 100%; padding: 4px 6px; border: 1px solid var(--border); border-radius: 6px; }
+.tab-widget-tools .analog-option { font-size: 12px; }
+.tab-widget-tools .analog-option select { background: #263e39; color: inherit; border-color: #fffdf445; }
+.canvas-overlay[data-widget-editing='true'] .canvas-selection .canvas-resize {
+  width: 28px; height: 28px; color: #f4f9ff; background: #102233ee; border-color: #f4f9ff80;
+}

@@ -4,11 +4,11 @@ import { readActiveTheme } from '../src/preferences.js'
 import { defaultThemeId, filterThemes, galleryCategories, themes, themesById } from '../src/themeCatalog.js'
 import { bundledById } from '../src/background.js'
 
-test('gallery has 33 bilingual presets with wallpaper assets', () => {
-  assert.equal(themes.length, 33)
-  assert.equal(themesById.size, 67)
+test('gallery presets have bilingual names and wallpaper assets', () => {
+  assert.equal(themes.length, 51)
+  assert.equal(themesById.size, 88)
   assert.ok(themesById.has(defaultThemeId))
-  assert.deepEqual(galleryCategories.map(([id]) => id), ['nature', 'anime', 'nostalgia', 'sky'])
+  assert.deepEqual(galleryCategories.map(([id]) => id), ['anime', 'conan', 'doraemon', 'landscape', 'nature', 'nostalgia', 'sky'])
   assert.ok(themes.every((theme) => bundledById.has(theme.wallpaper?.assetId)))
   for (const theme of themes) {
     assert.equal(theme.names.length, 2)
@@ -26,23 +26,49 @@ test('filters combine favorites, category and localized search with or without a
   assert.deepEqual(ids({ favoritesOnly: true, favorites: new Set() }), [])
   assert.deepEqual(ids({ query: 'ngo lang', category: 'anime' }), ['village-after-rain'])
   const nature = ids({ category: 'nature' })
-  assert.equal(nature.length, 21)
+  assert.equal(nature.length, 30)
   assert.ok(nature.includes('forest-hour') && nature.includes('strata-shore'))
   assert.ok(!nature.includes('avenue-at-night') && !nature.includes('castle-at-blue-hour'))
   assert.deepEqual(ids({ query: 'bo da tang lop', category: 'nature' }), ['strata-shore'])
   assert.deepEqual(ids({ query: 'bo da tang lop', category: 'anime' }), ['strata-shore'])
   assert.deepEqual(ids({ category: 'sky', favoritesOnly: true, favorites: new Set(['ember-tide']) }), ['ember-tide'])
-  assert.deepEqual(ids({ category: 'nostalgia' }), ['lanterns-after-rain', 'village-after-rain', 'evening-ferry'])
+  assert.deepEqual(ids({ category: 'nostalgia' }), [
+    'lanterns-after-rain', 'paper-in-late-light', 'village-after-rain', 'evening-ferry',
+  ])
+  for (const category of ['anime', 'landscape', 'nature']) {
+    assert.deepEqual(ids({ query: 'ruong bac thang', category }), ['terraces-in-the-mist'])
+  }
+  assert.deepEqual(ids({ query: 'avenue under soft clouds', category: 'landscape' }), ['avenue-under-soft-clouds'])
+  assert.deepEqual(ids({ query: 'avenue under soft clouds', category: 'nature' }), [])
+  assert.deepEqual(ids({ query: 'paper in late light', category: 'landscape' }), [])
+  assert.deepEqual(ids({ query: 'conan coastal', category: 'anime' }), ['conan-coastal-platform'])
+  assert.deepEqual(ids({ query: 'conan', category: 'conan' }), [
+    'conan-sunlit-kick', 'moonlit-rooftop-rendezvous', 'conan-night-chase', 'conan-coastal-platform',
+  ])
+  const doraemon = [
+    'doraemon-town-and-hill', 'doraemon-paper-planes', 'doraemon-treetop-picnic',
+    'doraemon-city-flight', 'doraemon-ocean-adventure',
+  ]
+  assert.deepEqual(ids({ category: 'doraemon' }), doraemon)
+  assert.deepEqual(ids({ query: 'Doraemon', category: 'anime' }), doraemon)
+  assert.deepEqual(ids({ query: 'tiec dua hau', category: 'doraemon' }), ['doraemon-treetop-picnic'])
+  assert.deepEqual(ids({ query: 'tinh van tim', category: 'sky' }), ['violet-nebula'])
 })
 
 test('retired presets are absent from gallery search and favorites but remain valid for saved selections', () => {
   const retired = [...themesById.values()].filter((theme) => !themes.includes(theme))
-  assert.equal(retired.length, 34)
+  assert.equal(retired.length, 37)
   for (const theme of retired) {
     assert.ok(!filterThemes({ query: theme.names[0] }).includes(theme))
     assert.equal(readActiveTheme({ themeId: theme.id, version: 1 }).themeId, theme.id)
   }
   assert.deepEqual(filterThemes({ favoritesOnly: true, favorites: new Set(['midnight-orbit']) }), [])
+  for (const id of ['blue-marble', 'martian-dunes', 'cosmic-cliffs']) {
+    const preset = themesById.get(id)
+    assert.ok(retired.includes(preset))
+    assert.ok(bundledById.has(preset.wallpaper.assetId))
+    assert.deepEqual(filterThemes({ favoritesOnly: true, favorites: new Set([id]) }), [])
+  }
 })
 
 test('active preferences recover gracefully and normalize valid custom colors', () => {

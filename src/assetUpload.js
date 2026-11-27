@@ -34,7 +34,7 @@ async function makeThumbnail(bitmap) {
   ))
 }
 
-export async function uploadPicture(file) {
+export async function preparePicture(file) {
   if (!file.size) throw new StudioError('invalidImage')
   if (file.size > maxImageBytes) throw new StudioError('imageTooLarge')
   if (file.type && !imageTypes.includes(file.type)) throw new StudioError('invalidImage')
@@ -46,14 +46,19 @@ export async function uploadPicture(file) {
   try {
     if (bitmap.width * bitmap.height > maxImagePixels) throw new StudioError('imageTooLarge')
     const thumbnail = await makeThumbnail(bitmap)
-    const id = 'asset:' + crypto.randomUUID()
     const metadata = {
-      id, name: file.name, kind: 'upload', mime, bytes: file.size,
+      name: file.name, kind: 'upload', mime, bytes: file.size,
       width: bitmap.width, height: bitmap.height, createdAt: Date.now(),
     }
-    await savePicture(metadata, original, thumbnail)
-    return id
+    return { ...metadata, blob: original, thumbnail }
   } finally {
     bitmap.close()
   }
+}
+
+export async function uploadPicture(file) {
+  const { blob, thumbnail, ...metadata } = await preparePicture(file)
+  const id = 'asset:' + crypto.randomUUID()
+  await savePicture({ ...metadata, id }, blob, thumbnail)
+  return id
 }

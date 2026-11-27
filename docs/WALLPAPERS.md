@@ -1,6 +1,24 @@
 # Bộ wallpaper NewTab Studio
 
-[Bộ 22 wallpaper anime vẽ từ ảnh tham chiếu](ANIME_WALLPAPERS.md) gồm bảng ảnh gốc, tên theme, file WebP và prompt đã dùng.
+[Các đợt vẽ wallpaper anime](ANIME_WALLPAPERS.md) có bảng ảnh gốc, tên theme, file WebP và prompt đã dùng.
+
+## Cảnh vũ trụ · 1.1.3
+
+Ba ảnh dùng ImageGen tích hợp, xuất WebP 1600 × 900 và ảnh thu nhỏ 480 × 270. Cực quang nhìn từ quỹ đạo dùng ảnh đã tạo trong chat trước.
+
+- [Vành đai trên biển băng](../public/backgrounds/rings-over-ice.webp)
+
+  > Use case: stylized-concept. Asset: cinematic wide 16:9 wallpaper for Chrome New Tab. A colossal ringed gas giant rising over a quiet icy moon with a faintly turquoise aurora above jagged ice, rich midnight blues and silver rim light. Distinct sweeping rings, calm dark areas for home-screen widgets, a few sparse stars, polished atmospheric space illustration. No lettering, grids, watermarks or borders.
+
+- [Tinh vân tím](../public/backgrounds/violet-nebula.webp)
+
+  > Use case: stylized-concept. Asset: wide 16:9 Chrome New Tab wallpaper. Paint a deep space vista of a violet and copper emission nebula curling around a dark cavity, with distant stars and delicate wisps of illuminated gas. Rich dimensional soft detail, predominantly dark indigo with warm light concentrated near center-right, calm space for widgets, no text, spacecraft, logos, borders or watermarks.
+
+- [Cực quang nhìn từ quỹ đạo](../public/backgrounds/aurora-from-orbit.webp)
+
+  > Create an original 16:9 science-fiction wallpaper, view from a low orbit over a fictional ice moon. Sweeping curved icy horizon along the lower third, subtle blue-green luminous auroras rising from the white and blue ridged ice, a distant small crescent planet near the upper right, delicate rich stars and dark midnight blue negative space above the horizon near the middle. Cinematic highly detailed painterly concept art with a calm palette of slate-blue, deep teal and pearlescent snow, strong sense of scale, no characters, no spacecraft. Full bleed without borders, letters, logos, or graphics.
+
+## Bộ ảnh ban đầu
 
 Tám ảnh riêng được tạo bằng công cụ ImageGen tích hợp theo brief bên dưới. Bản WebP đầy đủ nằm trong `public/backgrounds/`, ảnh thu nhỏ nằm trong `public/backgrounds/thumbs/`. SuperStart được tham khảo về cách dùng wallpaper phủ nền New Tab. [SuperStart trên Chrome Web Store](https://chromewebstore.google.com/detail/superstart-new-tab-page/eajimemccdpladcgbfeideelblbkiclc)
 

@@ -34,3 +34,10 @@ Nghiệm thu bằng đổi ngôn ngữ, qua nửa đêm, mở lại timer, chỉ
 - Bật **Liên kết nhanh** trong **Chỉnh tiện ích**. Ở mục **Đã lưu**, thêm qua nút dấu cộng, sửa và gỡ trong **Cài đặt lối tắt**. Lối tắt đã lưu gắn với ID widget và được lưu cục bộ.
 - **Hay truy cập** xếp theo số lượt truy cập của tối đa 1.000 URL mới nhất được Chrome trả về trong 90 ngày. **Mới truy cập** xếp theo thời điểm mở. Mỗi mục lịch sử hiển thị tối đa tám kết quả HTTP(S). Kết quả tự cập nhật khi Chrome báo lịch sử thay đổi. [Chrome History API](https://developer.chrome.com/docs/extensions/reference/api/history)
 - Hai chế độ lịch sử dùng cùng quyền `history` tùy chọn và chỉ gọi API sau khi quyền đã được cấp. Khi bị thu hồi quyền, widget hiện trạng thái yêu cầu cấp quyền lại. [Chrome Permissions API](https://developer.chrome.com/docs/extensions/reference/api/permissions)
+
+## Kiểu chữ, kích thước và đồng hồ từ 1.1.1
+
+- Trong **Chỉnh tiện ích**, chọn widget và kéo góc dưới bên phải để thay đổi kích thước. Dùng Alt và phím mũi tên, hoặc đưa tiêu điểm tới tay nắm rồi dùng phím mũi tên. Lưu kích thước chuyển Tự sắp xếp sang Canvas tự do. Màn hẹp vẫn dùng thẻ phân trang.
+- Đồng hồ kim có bốn mặt Trắng ngà, Xanh đêm, Xanh xô thơm và Đồng ấm. Chọn chữ số, vạch hoặc chấm và tùy chọn kim giây. Mặt đồng hồ tự vừa thẻ, với hai trục cuộn tắt.
+- Widget dùng Be Vietnam Pro, phần nội dung Châm ngôn dùng Lora. Hai kiểu chữ được đóng gói cục bộ. [Nguồn Be Vietnam Pro](https://github.com/google/fonts/tree/main/ofl/bevietnampro) · [Giấy phép OFL](../../public/fonts/be-vietnam-pro-OFL.txt)
+- Châm ngôn mỗi ngày xoay vòng 28 mục theo ngày địa phương, gồm 8 câu biên soạn trước đó và 20 đoạn Kinh Thánh. Bản Anh trích từ World English Bible theo thứ tự sách Công giáo. Bản Việt giữ lời người dùng cung cấp. Các đoạn dài có vùng cuộn riêng. [Nguồn World English Bible](https://ebible.org/Scriptures/details.php?id=eng-web-c)

@@ -1,4 +1,4 @@
-import { Move, RotateCw } from 'lucide-react'
+import { Move, MoveDiagonal, RotateCw } from 'lucide-react'
 import { usePictureUrl } from './backgroundRendering.jsx'
 import { bounds } from './canvasGeometry.js'
 import { canvasSize } from './canvasModel.js'
@@ -53,7 +53,7 @@ export function SceneCanvas({ canvas, editor, language, liveWidgets = false, doc
               '--sticker-size': Math.min(layer.width, layer.height) * 0.78 / 12 + 'cqw',
             }}
             onPointerDown={editor && ((event) => editor.onLayer(event, layer.id))}
-            onContextMenu={editor && ((event) => editor.onMenu(event, layer.id))}>
+            onContextMenu={editor?.onMenu && ((event) => editor.onMenu(event, layer.id))}>
             {artwork(layer, language, liveWidgets)}
             {editor?.widgetsOnly && layer.type === 'widget' && !layer.locked &&
               <span className="canvas-widget-grip" aria-hidden="true"><Move size={14} /></span>}
@@ -64,12 +64,14 @@ export function SceneCanvas({ canvas, editor, language, liveWidgets = false, doc
         {editor?.guides.y !== undefined && <span className="canvas-guide horizontal" aria-hidden="true"
           style={{ top: editor.guides.y / canvasSize.height * 100 + '%' }} />}
         {selection && <div className="canvas-selection" style={boxStyle(selection)}>
-          {!editor.widgetsOnly && <><button type="button" className="canvas-rotate" aria-label={t('rotateHandle', language)}
+          {!editor.widgetsOnly && <button type="button" className="canvas-rotate" aria-label={t('rotateHandle', language)}
             title={t('rotateHandle', language)} onPointerDown={(event) => editor.onHandle(event, 'rotate')}>
             <RotateCw size={12} aria-hidden="true" />
-          </button>
+          </button>}
           <button type="button" className="canvas-resize" aria-label={t('resizeHandle', language)}
-            title={t('resizeHandle', language)} onPointerDown={(event) => editor.onHandle(event, 'resize')} /></>}
+            title={t('resizeHandle', language)} onPointerDown={(event) => editor.onHandle(event, 'resize')}>
+            {editor.widgetsOnly && <MoveDiagonal size={15} aria-hidden="true" />}
+          </button>
         </div>}
       </div>
     </div>
